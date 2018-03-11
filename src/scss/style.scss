@@ -8,3 +8,11 @@ $font-stack: -apple-system, BlinkMacSystemFont, Roboto, 'Open Sans', 'Helvetica 
   font-weight: 400;
   src: url(../fonts/Roboto-Regular.ttf);
 }
+
+body {
+  font-family: $font-stack;
+
+  #logo {
+    width: 10rem;
+  }
+}
