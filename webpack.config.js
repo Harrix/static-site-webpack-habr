@@ -74,7 +74,7 @@ module.exports = {
       filename: './css/style.bundle.css',
       allChunks: true,
     }),
-    new CleanWebpackPlugin(['dist', 'build']),
+    new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([{
         from: './src/fonts',
         to: './fonts'
