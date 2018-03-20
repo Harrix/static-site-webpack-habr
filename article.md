@@ -39,7 +39,7 @@
 └── webpack.config.js    - файл настроек Webpack
 ```
 
-<spoiler title="Та же структура, но с показом файлов, которые присутствуют в примере:">
+Та же структура, но с показом файлов, которые присутствуют в примере:
 ```
 .
 ├── dist
@@ -66,7 +66,6 @@
 ├── package.json
 └── webpack.config.js
 ```
-</spoiler>
 
 Под favicon выделена целая папка, так как в современном web обычным одним ico файлом не обойтись. Но для примера используется только этот один файл.
 
@@ -90,7 +89,7 @@ npm init
 npm install webpack webpack-cli webpack-dev-server --save-dev
 ```
 
-<spoiler title="Файл package.json сейчас выглядит примерно так:">
+Файл package.json сейчас выглядит примерно так:
 ```
 {
   "name": "static-site-webpack-habrahabr",
@@ -108,7 +107,6 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
   }
 }
 ```
-</spoiler>
 
 Также создастся файл ```package-lock.json```, который вообще не трогаем. Но в git репозиторий добавлять этот файл нужно, в отличии от папки ```node_modules```, которую нужно прописать в файле ```.gitignore```, если пользуетесь git.
 
@@ -322,7 +320,7 @@ module.exports = {
 
 **Update.** С последней проблемой можно справиться, как подсказал @Odrin, с помощью пакета [resolve-url-loader](https://github.com/bholloway/resolve-url-loader) и file-loader.
 
-<spoiler title="Пример решения">
+Пример решения
 ```
 ...
 
@@ -372,7 +370,6 @@ module.exports = {
 ```
 
 То есть пакет resolve-url-loader вместо относительных путей ставит пути, которые webpack поймет. А уже file-loader будет копировать нужные файлы. Проблема в свойстве name в file-loader. Если его указать как ```name: '[path]/[name].[ext]'```, то в моей примере в папке dist появится папка ```dist\node_modules\lightgallery\src\img```, в которой уже находятся изображения. Нет, в css будут прописаные верные пути до этой папки, но это будет не красиво. Поэтому лучше название файла указывать без пути (например ```name: 'img/[name].[ext]'```). Правда, тогда все картинки пойдут в одну папку - не всегда это будет полезно.
-</spoiler>
 
 Поэтому установкой ```url=false``` говорим, что все ссылки на файлы в SCSS коде не трогаем, пути не меняем, никакие файлы не копируем и не встраиваем: с ними разберемся потом отдельно. Возможно, это решение плохое, и вы предложите более правильный подход.
 
@@ -552,7 +549,7 @@ module.exports = {
 
 ## Итоговые файлы
 
-<spoiler title="Файл package.json:">
+Файл package.json:
 ```
 {
   "name": "static-site-webpack-habrahabr",
@@ -591,9 +588,8 @@ module.exports = {
   }
 }
 ```
-</spoiler>
 
-<spoiler title="Файл webpack.config.js:">
+Файл webpack.config.js:
 ```
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -692,9 +688,8 @@ module.exports = {
   ].concat(htmlPlugins)
 };
 ```
-</spoiler>
 
-<spoiler title="Файл шаблона index.html:">
+Файл шаблона index.html:
 ```
 <% var data = {
   title: "Заголовок | Проект",
@@ -709,9 +704,8 @@ module.exports = {
 
 <%= _.template(require('./../includes/footer.html'))(data) %>
 ```
-</spoiler>
 
-<spoiler title="Файл шаблона шапки header.html:">
+Файл шаблона шапки header.html:
 ```
 <!doctype html>
 <html lang="ru">
@@ -727,9 +721,8 @@ module.exports = {
   <body>
     <header><img src="img/logo.svg" id="logo"></header>
 ```
-</spoiler>
 
-<spoiler title="Файл шаблона footer.html:">
+Файл шаблона footer.html:
 ```
 <footer><%=author%></footer>
 
@@ -737,9 +730,8 @@ module.exports = {
 </body>
 </html>
 ```
-</spoiler>
 
-<spoiler title="Сгенерированный index.html:">
+Сгенерированный index.html:
 ```
 <!doctype html>
 <html lang="ru">
@@ -769,7 +761,6 @@ module.exports = {
 
 </html>
 ```
-</spoiler>
 
 ## Исходники
 
