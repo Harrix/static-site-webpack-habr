@@ -1,4 +1,4 @@
-![](https://github.com/Harrix/static-site-webpack-habrahabr/blob/master/docs/thumbnail.png)
+![](img/thumbnail.png)
 
 После прочтения ряда статей (например, [этой](https://habrahabr.ru/company/mailru/blog/340922/)) решил перейти на современный подход с использованием Node.js при написании простых сайтов с подхода «динозавров». Ниже представлен разбор примера сборки простого статического сайта с помощью [Webpack 4](https://webpack.js.org/). Статья написана, так как инструкции с решением моей задачи не нашел: пришлось собирать всё по кусочкам.<cut />
 
@@ -73,7 +73,7 @@
 
 Для работы с проектом использую [Visual Studio Code](https://code.visualstudio.com/), которым очень доволен. Особенно мне нравится, что командная строка встроена в программу и вызывается через **Ctrl + `**.
 
-![](https://github.com/Harrix/static-site-webpack-habrahabr/blob/master/docs/visual_studio_code.png)
+![](img/visual_studio_code.png)
 
 Сделаем болванку Node.js проекта. Для этого создадим папку нашего проекта с вышеописанной структурой и перейдем в неё  в командной строке, где вызовем команду для создания файла ```package.json```.
 
@@ -545,7 +545,7 @@ module.exports = {
 
 Всё. Теперь командой **npm run build-and-beautify** собираем проект и в папке ```dist``` появится собранный статический сайт.
 
-![](https://github.com/Harrix/static-site-webpack-habrahabr/blob/master/docs/dist.png)
+![](img/dist.png)
 
 ## Итоговые файлы
 
