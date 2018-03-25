@@ -90,12 +90,13 @@ npm init
 
 Установим три общих пакета, которые нам потребуются в любом случае: ```webpack```, ```webpack-cli``` (работу с командной строкой в webpack вынесли в отдельный пакет) и ```webpack-dev-server``` (для запуска локального сервера, чтобы в браузере сразу отображались сохраненные изменения проекта). 
 
-```
+```console
 npm install webpack webpack-cli webpack-dev-server --save-dev
 ```
 
 Файл package.json сейчас выглядит примерно так:
-```
+
+```json
 {
   "name": "static-site-webpack-habrahabr",
   "version": "1.0.0",
@@ -119,13 +120,13 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
 
 Так как Webpack создан в первую очередь для сборки js файлов, то эта часть будем самой простой. Чтобы можно было писать javascript в современном виде ES2015, который не поддерживается браузерами, поставим пакеты ```babel-core```, ```babel-loader```, ```babel-preset-env```.
 
-```
+```console
 npm install babel-core babel-loader babel-preset-env --save-dev
 ```
 
 После создаем файл настроек ```webpack.config.js``` с таким содержимым:
 
-```
+```json
 const path = require('path');
 
 module.exports = {
@@ -162,7 +163,7 @@ module.exports = {
 
 В нашем тестовом примере мы верстаем наши странице на Boostrap 4. Поэтому нам нужно будет установить три пакета: ```bootstrap```, ```jquery```, ```popper.js```. Второй и третий пакет мы устанавливаем по требованию Bootstrap.
 
-```
+```console
 npm install bootstrap jquery popper.js --save
 ```
 
@@ -184,7 +185,7 @@ jQuery(function() {
 
 Теперь можно перейти к сборке js файла. Для этого в файле ```package.json``` в разделе ```scripts``` пропишем следующие npm скрипты:
 
-```
+```json
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
@@ -203,13 +204,13 @@ jQuery(function() {
 
 Режим построения проекта создает или переписывает файлы в папке ```dist```. Но во время разработки проекта при разных сборках файлы могут переименовываться, удаляться. И Webpack не будет следить, чтобы уже ненужные файлы, оставшиеся после предыдущих сборок, удалялись из папки ```dist```. Поэтому добавим еще один пакет ```clean-webpack-plugin```,  который будет очищать папку ```dist``` перед каждой сборкой проекта.
 
-```
+```console
 npm install clean-webpack-plugin --save-dev
 ```
 
 Внесем изменения в файл ```webpack.config.js```.
 
-```
+```json
 ...
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
