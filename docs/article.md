@@ -126,7 +126,7 @@ npm install babel-core babel-loader babel-preset-env --save-dev
 
 После создаем файл настроек ```webpack.config.js``` с таким содержимым:
 
-```json
+```javascript
 const path = require('path');
 
 module.exports = {
