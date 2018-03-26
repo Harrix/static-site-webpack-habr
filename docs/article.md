@@ -88,7 +88,7 @@ npm init
 
 На все вопросы можно просто отвечать, нажимая ```Enter```, если заполнять подробную информацию не хочется.
 
-Установим три общих пакета, которые нам потребуются в любом случае: ```webpack```, ```webpack-cli``` (работу с командной строкой в webpack вынесли в отдельный пакет) и ```webpack-dev-server``` (для запуска локального сервера, чтобы в браузере сразу отображались сохраненные изменения проекта). 
+Установим три общих пакета, которые нам потребуются в любом случае: ```webpack```, ```webpack-cli``` (работу с командной строкой в webpack вынесли в отдельный пакет) и ```webpack-dev-server``` (для запуска локального сервера, чтобы в браузере сразу отображались сохраненные изменения проекта).
 
 ```console
 npm install webpack webpack-cli webpack-dev-server --save-dev
@@ -210,7 +210,7 @@ npm install clean-webpack-plugin --save-dev
 
 Внесем изменения в файл ```webpack.config.js```.
 
-```json
+```javascript
 ...
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
@@ -257,13 +257,13 @@ body {
 
 Важно! На момент написания статьи плагин ```extract-text-webpack-plugin``` в стабильной версии не умеет работать с Webpack 4. Поэтому нужно устанавливать его beta версию через ```@next```:
 
-```
+```console
 npm install node-sass sass-loader css-loader extract-text-webpack-plugin@next --save-dev
 ```
 
 Надеюсь, что вскоре можно будет устанавливать все плагины по нормальному:
 
-```
+```console
 npm install node-sass sass-loader css-loader extract-text-webpack-plugin --save-dev
 ```
 
@@ -385,7 +385,7 @@ module.exports = {
 
 Для сборки HTML страниц будем использовать плагин ```html-webpack-plugin```, который поддерживает различные виды шаблонизаторов. Также нам потребуются пакет ```raw-loader```.
 
-```
+```console
 npm install html-webpack-plugin raw-loader --save-dev
 ```
 
@@ -494,7 +494,7 @@ module.exports = {
 
 Устанавливаем этот плагин:
 
-```
+```console
 npm install html-cli --save-dev
 ```
 
@@ -513,7 +513,7 @@ npm install html-cli --save-dev
 
 Мы сгенерировали js, css файлы, HTML страницы. Остались файлы изображений, шрифтов и др., которые мы не трогали и сознательно не копировали через ```file-loader``` или ```url-loader```. Поэтому скопируем все оставшиеся папки через плагин ```copy-webpack-plugin```:
 
-```
+```console
 npm install copy-webpack-plugin --save-dev
 ```
 
@@ -696,7 +696,8 @@ module.exports = {
 ```
 
 Файл шаблона index.html:
-```
+
+```html
 <% var data = {
   title: "Заголовок | Проект",
   author: "Harrix"
@@ -712,7 +713,8 @@ module.exports = {
 ```
 
 Файл шаблона шапки header.html:
-```
+
+```html
 <!doctype html>
 <html lang="ru">
   <head>
