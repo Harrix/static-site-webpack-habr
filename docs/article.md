@@ -269,7 +269,7 @@ npm install node-sass sass-loader css-loader extract-text-webpack-plugin --save-
 
 В ```webpack.config.js``` добавим следующие изменения:
 
-```
+```javascript
 ...
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 ...
@@ -322,12 +322,13 @@ module.exports = {
 
 И самый спорный момент. Для пакета ```css-loader``` мы добавили параметр ```url```, равный ```false```. Зачем? По умолчанию ```url=true```, и если Webpack при сборке css находит ссылки на внешние файлы: фоновые изображения, шрифты (например, в нашем случае есть ссылка на файл шрифта ```url(../fonts/Roboto-Regular.ttf)```), то он эти файлы попросит как-то обработать. Для этого используют чаще всего пакеты ```file-loader``` (копирует файлы в папку сборки) или ```url-loader``` (маленькие файлы пытается встроить в HTML код). При этом прописанные относительные пути к файлам в собранном css могут быть изменены.
 
-Но с какой проблемой столкнулся на практике. Есть у меня папка ```src/scss ``` с SСSS кодом. Есть папка ```src/img ``` с картинками, на которые ссылаются в SСSS  коде. Всё хорошо. Но, например, мне потребовалось подключить на сайт стороннюю библиотеку (например, lightgallery). SCSS код у неё располагается в папке ```node_modules/lightgallery/src/sass```, который ссылается на картинки из папки ```node_modules/lightgallery/src/img``` через относительные пути. И если добавить стили библиотеки в наш ```style.scss```, то ```file-loader``` будет искать картинки библиотеки ```lightgallery``` в моей папке ```src/img ```, а не там, где они находятся. И побороть я это не смог.
+Но с какой проблемой столкнулся на практике. Есть у меня папка ```src/scss``` с SСSS кодом. Есть папка ```src/img``` с картинками, на которые ссылаются в SСSS  коде. Всё хорошо. Но, например, мне потребовалось подключить на сайт стороннюю библиотеку (например, lightgallery). SCSS код у неё располагается в папке ```node_modules/lightgallery/src/sass```, который ссылается на картинки из папки ```node_modules/lightgallery/src/img``` через относительные пути. И если добавить стили библиотеки в наш ```style.scss```, то ```file-loader``` будет искать картинки библиотеки ```lightgallery``` в моей папке ```src/img```, а не там, где они находятся. И побороть я это не смог.
 
 **Update.** С последней проблемой можно справиться, как подсказал @Odrin, с помощью пакета [resolve-url-loader](https://github.com/bholloway/resolve-url-loader) и file-loader.
 
 Пример решения
-```
+
+```javascript
 ...
 
 module.exports = {
@@ -340,7 +341,7 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
-            options: {name: 'img/[name].[ext]'}  
+            options: {name: 'img/[name].[ext]'}
           }
         ]
       },
@@ -391,7 +392,7 @@ npm install html-webpack-plugin raw-loader --save-dev
 
 В качестве шаблонизатора HTML будем использовать шаблонизатор по умолчанию lodash. Вот так будет выглядеть типичная HTML страница до сборки:
 
-```
+```html
 <% var data = {
   title: "Заголовок | Проект",
   author: "Harrix"
@@ -403,11 +404,11 @@ npm install html-webpack-plugin raw-loader --save-dev
 <%= _.template(require('./../includes/footer.html'))(data) %>
 ```
 
-Вначале в переменной ```data``` прописываем все наши переменные страницы, которые хотим использовать на этой странице. Потом встраиваем шаблоны шапки и футера через ```_.template(require())```. 
+Вначале в переменной ```data``` прописываем все наши переменные страницы, которые хотим использовать на этой странице. Потом встраиваем шаблоны шапки и футера через ```_.template(require())```.
 
 Важное уточнение. В статьях про сборку HTML страниц через ```html-webpack-plugin``` обычно подключают встраиваемые шаблоны просто через команду:
 
-```
+```javascript
 require('html-loader!./../includes/header.html')
 ```
 
@@ -415,7 +416,7 @@ require('html-loader!./../includes/header.html')
 
 Теперь мы можем использовать полноценные lodash синтаксис в встраиваемых шаблонах. В коде файла ```header.html``` ниже через ```<%=title%>``` печатаем заголовок статьи.
 
-```
+```html
 <!doctype html>
 <html lang="ru">
   <head>
@@ -433,7 +434,7 @@ require('html-loader!./../includes/header.html')
 
 В пакете html-webpack-plugin [есть возможность](https://github.com/jantimon/html-webpack-plugin#generating-multiple-html-files) генерировать несколько HTML страниц:
 
-```
+```javascript
  plugins: [
     new HtmlWebpackPlugin(), // Generates default index.html
     new HtmlWebpackPlugin({  // Also generate a test.html
@@ -447,7 +448,7 @@ require('html-loader!./../includes/header.html')
 
 Для этого в файле ```webpack.config.js``` внесем следующие изменения:
 
-```
+```javascript
 ...
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs')
@@ -500,7 +501,7 @@ npm install html-cli --save-dev
 
 И в файле ```package.json``` прописываем еще два скрипта, которые после работы Webpack будут приводить к красивому внешнему виду HTML файлы с установкой табуляции в два пробела.
 
-```
+```json
   "scripts": {
     "build-and-beautify": "webpack --mode production && html dist/*.html --indent-size 2",
     "beautify": "html dist/*.html --indent-size 2"
@@ -519,7 +520,7 @@ npm install copy-webpack-plugin --save-dev
 
 В файле ```webpack.config.js``` внесем изменения:
 
-```
+```javascript
 ...
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 ...
@@ -551,12 +552,13 @@ module.exports = {
 
 Всё. Теперь командой **npm run build-and-beautify** собираем проект и в папке ```dist``` появится собранный статический сайт.
 
-![](img/dist.png)
+![Builded files](img/dist.png)
 
 ## Итоговые файлы
 
 Файл package.json:
-```
+
+```json
 {
   "name": "static-site-webpack-habrahabr",
   "version": "1.0.0",
@@ -596,7 +598,8 @@ module.exports = {
 ```
 
 Файл webpack.config.js:
-```
+
+```javascript
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -731,7 +734,8 @@ module.exports = {
 ```
 
 Файл шаблона footer.html:
-```
+
+```html
 <footer><%=author%></footer>
 
 <script src="js/bundle.js"></script>
@@ -740,7 +744,8 @@ module.exports = {
 ```
 
 Сгенерированный index.html:
-```
+
+```html
 <!doctype html>
 <html lang="ru">
 
