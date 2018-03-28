@@ -324,7 +324,7 @@ module.exports = {
 
 Но с какой проблемой столкнулся на практике. Есть у меня папка ```src/scss``` с SСSS кодом. Есть папка ```src/img``` с картинками, на которые ссылаются в SСSS  коде. Всё хорошо. Но, например, мне потребовалось подключить на сайт стороннюю библиотеку (например, lightgallery). SCSS код у неё располагается в папке ```node_modules/lightgallery/src/sass```, который ссылается на картинки из папки ```node_modules/lightgallery/src/img``` через относительные пути. И если добавить стили библиотеки в наш ```style.scss```, то ```file-loader``` будет искать картинки библиотеки ```lightgallery``` в моей папке ```src/img```, а не там, где они находятся. И побороть я это не смог.
 
-**Update.** С последней проблемой можно справиться, как подсказал @Odrin, с помощью пакета [resolve-url-loader](https://github.com/bholloway/resolve-url-loader) и file-loader.
+**Update.** С последней проблемой можно справиться, как подсказал [Odrin](https://habrahabr.ru/users/odrin/), с помощью пакета [resolve-url-loader](https://github.com/bholloway/resolve-url-loader) и file-loader.
 
 Пример решения
 
