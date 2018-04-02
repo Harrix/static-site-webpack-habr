@@ -326,7 +326,7 @@ module.exports = {
 
 **Update.** С последней проблемой можно справиться, как подсказал [Odrin](https://habrahabr.ru/users/odrin/), с помощью пакета [resolve-url-loader](https://github.com/bholloway/resolve-url-loader) и file-loader.
 
-Пример решения
+Пример решения:
 
 ```javascript
 ...
