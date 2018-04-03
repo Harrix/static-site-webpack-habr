@@ -774,7 +774,3 @@ module.exports = {
 
 </html>
 ```
-
-## Исходники
-
-[Ссылка](https://github.com/Harrix/static-site-webpack-habrahabr) на репозиторий с рассмотренным проектом.
