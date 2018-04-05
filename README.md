@@ -1,6 +1,6 @@
 # static-site-webpack-habrahabr
 
-![Webpack](img/thumbnail.png)
+![Webpack](docs/img/thumbnail.png)
 
 Демонстрация сборки статического сайта с помощью Webpack.
 
