@@ -1,6 +1,6 @@
 {
   "name": "static-site-webpack-habrahabr",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "HTML template",
   "main": "src/index.js",
   "scripts": {
