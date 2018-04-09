@@ -19,7 +19,7 @@ function generateHtmlPlugins(templateDir) {
   })
 }
 
-const htmlPlugins = generateHtmlPlugins('./src/html/views')
+const htmlPlugins = generateHtmlPlugins('./src/html/views');
 
 module.exports = {
   entry: [
