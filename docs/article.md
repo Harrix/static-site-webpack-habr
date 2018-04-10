@@ -202,24 +202,25 @@ jQuery(function() {
 
 При запуске **npm run start** запустится локальный сервер, который запустит html страницу и также будет отслеживать изменения в файлах. Но пока этой командой не пользуемся, так как сборку html страниц не добавили.
 
-Режим построения проекта создает или переписывает файлы в папке ```dist```. Но во время разработки проекта при разных сборках файлы могут переименовываться, удаляться. И Webpack не будет следить, чтобы уже ненужные файлы, оставшиеся после предыдущих сборок, удалялись из папки ```dist```. Поэтому добавим еще один пакет ```clean-webpack-plugin```, который будет очищать папку ```dist``` перед каждой сборкой проекта.
+Режим построения проекта создает или переписывает файлы в папке ```dist```. Но во время разработки проекта при разных сборках файлы могут переименовываться, удаляться. И Webpack не будет следить, чтобы уже ненужные файлы, оставшиеся после предыдущих сборок, удалялись из папки ```dist```. ~~Поэтому добавим еще один пакет ```clean-webpack-plugin```, который будет очищать папку ```dist``` перед каждой сборкой проекта.~~
+
+Пришлось отказаться от ```clean-webpack-plugin```. Почему? Когда запускаешь сервер через команду ```npm run start``` (```webpack-dev-server --mode development --open```), то webpack компилирует файлы автоматом, не сохраняя их в папку ```dist```. И это нормально. Но при этом папка ```dist``` очищается из-за наличия ```clean-webpack-plugin```. В результате в режиме работы локального сервера папка ```dist``` пустует, что негативно сказывается на работе с git (только в случае, если вы в git репозиторий сохраняется сборку проекта, как и я): после каждого запуска сервера появляется куча изменений из-за удаленных файлов. Было бы хорошо, чтобы очистка папки ```dist``` происходила только при полноценной сборке, например, ```npm run build-and-beautify``` (об этой команде ниже). Плагин ```clean-webpack-plugin```настроить нужным способом не смог. Поэтому использую другой плагин ```del-cli```, который не связан с webpack и работает отдельно.
 
 ```console
-npm install clean-webpack-plugin --save-dev
+npm install del-cli --save-dev
 ```
 
-Внесем изменения в файл ```webpack.config.js```.
+Внесем изменения в файл ```package.json```.
 
-```javascript
+```json
+{
 ...
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-
-module.exports = {
-  ...
-  plugins: [
-      new CleanWebpackPlugin(['dist']),
-  ]
-};
+  "scripts": {
+...
+    "clear": "del-cli dist"
+  },
+...
+}
 ```
 
 ## Сборка CSS файла
@@ -503,10 +504,12 @@ npm install html-cli --save-dev
 
 ```json
   "scripts": {
-    "build-and-beautify": "webpack --mode production && html dist/*.html --indent-size 2",
+    "build-and-beautify": "del-cli dist && webpack --mode production && html dist/*.html --indent-size 2",
     "beautify": "html dist/*.html --indent-size 2"
   },
 ```
+
+Обратите внимание на то, что в команду ```build-and-beautify``` я добавил еще ```del-cli dist```, который очищает папку ```dist``` перед сборкой.
 
 Поэтому для итоговой сборки рекомендую использовать не команду ***npm run build**, а команду **npm run build-and-beautify**.
 
@@ -567,32 +570,33 @@ module.exports = {
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "build-and-beautify": "webpack --mode production && html dist/*.html --indent-size 2",
+    "build-and-beautify": "del-cli dist && webpack --mode production && html dist/*.html --indent-size 2",
     "watch": "webpack --mode development --watch",
     "start": "webpack-dev-server --mode development --open",
-    "beautify": "html dist/*.html --indent-size 2"
+    "beautify": "html dist/*.html --indent-size 2",
+    "clear": "del-cli dist"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.0",
     "jquery": "^3.3.1",
-    "popper.js": "^1.13.0"
+    "popper.js": "^1.14.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
     "babel-preset-env": "^1.6.1",
-    "clean-webpack-plugin": "^0.1.18",
     "copy-webpack-plugin": "^4.5.0",
-    "css-loader": "^0.28.9",
+    "css-loader": "^0.28.11",
+    "del-cli": "^1.1.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-cli": "^1.0.0",
-    "html-webpack-plugin": "^3.0.4",
-    "node-sass": "^4.7.2",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.8.3",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
-    "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0"
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14",
+    "webpack-dev-server": "^3.1.3"
   }
 }
 ```
@@ -604,7 +608,6 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const fs = require('fs')
 
 function generateHtmlPlugins(templateDir) {
@@ -621,7 +624,7 @@ function generateHtmlPlugins(templateDir) {
   })
 }
 
-const htmlPlugins = generateHtmlPlugins('./src/html/views')
+const htmlPlugins = generateHtmlPlugins('./src/html/views');
 
 module.exports = {
   entry: [
@@ -676,7 +679,6 @@ module.exports = {
       filename: './css/style.bundle.css',
       allChunks: true,
     }),
-    new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([{
         from: './src/fonts',
         to: './fonts'
