@@ -13,7 +13,7 @@
     "clear": "del-cli dist"
   },
   "dependencies": {
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.1.1",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3"
   },
@@ -31,7 +31,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.1",
     "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15",
+    "webpack-cli": "^2.1.2",
     "webpack-dev-server": "^3.1.3"
   }
 }
