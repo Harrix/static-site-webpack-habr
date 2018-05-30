@@ -30,7 +30,7 @@
     "node-sass": "^4.9.0",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.1",
-    "webpack": "^4.10.1",
+    "webpack": "^4.10.2",
     "webpack-cli": "^2.1.4",
     "webpack-dev-server": "^3.1.4"
   }
