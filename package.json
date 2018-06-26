@@ -22,7 +22,7 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.51",
     "@babel/preset-env": "^7.0.0-beta.51",
     "babel-loader": "^8.0.0-beta.4",
-    "copy-webpack-plugin": "^4.5.0",
+    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
     "del-cli": "^1.1.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
