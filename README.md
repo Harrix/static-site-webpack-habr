@@ -2,7 +2,7 @@
 
 ![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habrahabr/master/docs/img/thumbnail.png)
 
-Демонстрация сборки статического сайта с помощью Webpack.
+Демонстрация сборки статического сайта с помощью `Webpack`.
 
 Для статьи [https://habrahabr.ru/post/350886/](https://habrahabr.ru/post/350886/).
 
@@ -12,7 +12,7 @@
 
 ## Использование
 
-1. Установите Node.js.
+1. Установите `Node.js`.
 
 2. Создайте папку, в которой будете создавать своей проект.
 
