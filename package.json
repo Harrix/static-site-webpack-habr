@@ -18,9 +18,9 @@
     "popper.js": "^1.14.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.51",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.51",
-    "@babel/preset-env": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.52",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.52",
+    "@babel/preset-env": "^7.0.0-beta.52",
     "babel-loader": "^8.0.0-beta.4",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
@@ -28,10 +28,10 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-cli": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.3",
-    "webpack": "^4.15.0",
+    "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4"
   }
