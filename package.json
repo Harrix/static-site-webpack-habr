@@ -13,14 +13,14 @@
     "clear": "del-cli dist"
   },
   "dependencies": {
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^4.1.2",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.52",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.52",
-    "@babel/preset-env": "^7.0.0-beta.52",
+    "@babel/core": "^7.0.0-beta.53",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.53",
+    "@babel/preset-env": "^7.0.0-beta.53",
     "babel-loader": "^8.0.0-beta.4",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
@@ -31,7 +31,7 @@
     "node-sass": "^4.9.2",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.3",
-    "webpack": "^4.15.1",
+    "webpack": "^4.16.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4"
   }
