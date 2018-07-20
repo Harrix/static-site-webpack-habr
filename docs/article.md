@@ -118,7 +118,7 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
 
 ## Собираем JavaScript
 
-Так как Webpack создан в первую очередь для сборки js файлов, то эта часть будем самой простой. Чтобы можно было писать javascript в современном виде ES2015, который не поддерживается браузерами, поставим пакеты `babel-core`, `babel-loader`, ```babel-preset-env```.
+Так как Webpack создан в первую очередь для сборки js файлов, то эта часть будем самой простой. Чтобы можно было писать javascript в современном виде ES2015, который не поддерживается браузерами, поставим пакеты `babel-core`, `babel-loader`, `babel-preset-env`.
 
 ```console
 npm install babel-core babel-loader babel-preset-env --save-dev
