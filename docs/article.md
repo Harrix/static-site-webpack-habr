@@ -124,7 +124,7 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
 npm install babel-core babel-loader babel-preset-env --save-dev
 ```
 
-После создаем файл настроек ```webpack.config.js``` с таким содержимым:
+После создаем файл настроек `webpack.config.js` с таким содержимым:
 
 ```javascript
 const path = require('path');
