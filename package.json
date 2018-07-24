@@ -13,7 +13,7 @@
     "clear": "del-cli dist"
   },
   "dependencies": {
-    "bootstrap": "^4.1.2",
+    "bootstrap": "^4.1.3",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3"
   },
