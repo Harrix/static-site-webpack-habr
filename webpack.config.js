@@ -51,8 +51,23 @@ module.exports = {
               loader: "css-loader",
               options: {
                 sourceMap: true,
-                minimize: true,
                 url: false
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                ident: 'postcss',
+                sourceMap: true,
+                plugins: () => [
+                  require('cssnano')({
+                    preset: ['default', {
+                      discardComments: {
+                        removeAll: true,
+                      },
+                    }]
+                  })
+                ]
               }
             },
             {
