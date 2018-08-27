@@ -553,7 +553,7 @@ module.exports = {
 };
 ```
 
-Всё. Теперь командой **npm run build-and-beautify** собираем проект и в папке ```dist``` появится собранный статический сайт.
+Всё. Теперь командой **npm run build-and-beautify** собираем проект и в папке `dist` появится собранный статический сайт.
 
 ![Builded files](img/dist.png)
 
