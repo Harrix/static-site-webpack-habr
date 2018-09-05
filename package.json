@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "build-and-beautify": "del-cli dist && webpack --mode production && html dist/*.html --indent-size 2",
+    "build-only": "webpack --mode production",
+    "build": "del-cli dist && webpack --mode production && html dist/*.html --indent-size 2",
     "watch": "webpack --mode development --watch",
     "start": "webpack-dev-server --mode development --open",
     "beautify": "html dist/*.html --indent-size 2",
