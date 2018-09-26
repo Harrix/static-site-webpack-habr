@@ -1,5 +1,5 @@
 {
-  "name": "static-site-webpack-habrahabr",
+  "name": "static-site-webpack-habr",
   "version": "1.0.0",
   "description": "HTML template",
   "main": "src/index.js",

@@ -1,14 +1,14 @@
-# static-site-webpack-habrahabr
+# static-site-webpack-habr
 
-![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habrahabr/master/docs/img/thumbnail.png)
+![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habr/master/docs/img/thumbnail.png)
 
 Демонстрация сборки статического сайта с помощью `Webpack`.
 
-Для статьи [https://habrahabr.ru/post/350886/](https://habrahabr.ru/post/350886/).
+Для статьи [https://habr.com/post/350886/](https://habr.com/post/350886/).
 
-Дублирование статьи [article.md](https://github.com/Harrix/static-site-webpack-habrahabr/blob/master/docs/article.md).
+Дублирование статьи [article.md](https://github.com/Harrix/static-site-webpack-habr/blob/master/docs/article.md).
 
-Лицензия: [MIT](https://github.com/Harrix/static-site-webpack-habrahabr/blob/master/LICENSE.md).
+Лицензия: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
 
 ## Использование
 
