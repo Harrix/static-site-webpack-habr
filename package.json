@@ -29,7 +29,7 @@
     "html-cli": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.4",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.9.4",
     "postcss-loader": "^3.0.0",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.1.0",
