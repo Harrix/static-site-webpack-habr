@@ -268,7 +268,7 @@ npm install node-sass sass-loader css-loader extract-text-webpack-plugin@next --
 npm install node-sass sass-loader css-loader extract-text-webpack-plugin --save-dev
 ```
 
-В ```webpack.config.js``` добавим следующие изменения:
+В `webpack.config.js` добавим следующие изменения:
 
 ```javascript
 ...
