@@ -256,7 +256,7 @@ body {
 
 Для обработки css файлов нам будут нужны следующие модули: `node-sass`, ```sass-loader```, ```css-loader``` и ```extract-text-webpack-plugin``` (говорят, что в следующей версии Webpack в последнем плагине надобность отпадет).
 
-Важно! На момент написания статьи плагин ```extract-text-webpack-plugin``` в стабильной версии не умеет работать с Webpack 4. Поэтому нужно устанавливать его beta версию через ```@next```:
+Важно! На момент написания статьи плагин ```extract-text-webpack-plugin``` в стабильной версии не умеет работать с Webpack 4. Поэтому нужно устанавливать его beta версию через `@next`:
 
 ```console
 npm install node-sass sass-loader css-loader extract-text-webpack-plugin@next --save-dev
