@@ -210,7 +210,7 @@ jQuery(function() {
 npm install del-cli --save-dev
 ```
 
-Внесем изменения в файл ```package.json```.
+Внесем изменения в файл `package.json`.
 
 ```json
 {
