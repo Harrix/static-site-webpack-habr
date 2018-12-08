@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs')
 const TerserPlugin = require('terser-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 function generateHtmlPlugins(templateDir) {
   const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
@@ -21,7 +22,7 @@ function generateHtmlPlugins(templateDir) {
 
 const htmlPlugins = generateHtmlPlugins('./src/html/views');
 
-module.exports = {
+const config = {
   entry: [
     './src/js/index.js',
     './src/scss/style.scss'
@@ -107,4 +108,13 @@ module.exports = {
       }
     ]),
   ].concat(htmlPlugins)
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'production') {
+  config.plugins.push(
+    new CleanWebpackPlugin('dist')
+  )
+  }
+  return config;
 };

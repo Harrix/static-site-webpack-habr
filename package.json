@@ -1,16 +1,13 @@
 {
   "name": "static-site-webpack-habr",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "HTML template",
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack --mode development",
-    "build-only": "webpack --mode production",
-    "build": "del-cli dist && webpack --mode production && html dist/*.html --indent-size 2",
+    "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html",
     "watch": "webpack --mode development --watch",
-    "start": "webpack-dev-server --mode development --open",
-    "beautify": "html dist/*.html --indent-size 2",
-    "clear": "del-cli dist"
+    "start": "webpack-dev-server --mode development --open"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",
@@ -18,15 +15,15 @@
     "popper.js": "^1.14.6"
   },
   "devDependencies": {
+    "clean-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.1",
     "cssnano": "^4.1.7",
-    "del-cli": "^1.1.0",
-    "html-cli": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.5",
     "node-sass": "^4.10.0",
     "postcss-loader": "^3.0.0",
+    "prettier": "^1.15.3",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.1.0",
     "terser-webpack-plugin": "^1.1.0",
