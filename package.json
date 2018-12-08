@@ -5,9 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack --mode development",
-    "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html",
     "watch": "webpack --mode development --watch",
-    "start": "webpack-dev-server --mode development --open"
+    "start": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",
