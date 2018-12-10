@@ -24,7 +24,7 @@
     "node-sass": "^4.11.0",
     "postcss-loader": "^3.0.0",
     "prettier": "^1.15.3",
-    "raw-loader": "^0.5.1",
+    "raw-loader": "^1.0.0",
     "sass-loader": "^7.1.0",
     "terser-webpack-plugin": "^1.1.0",
     "webpack": "^4.27.1",
