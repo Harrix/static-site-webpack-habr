@@ -225,7 +225,7 @@ npm install del-cli --save-dev
 
 ## Сборка CSS файла
 
-CSS файл будем собирать из SCSS файлов, под которые у нас зарезервирована папка `src/scss`. В ней создадим файл ```style.scss```, например, со следующим содержимым:
+CSS файл будем собирать из SCSS файлов, под которые у нас зарезервирована папка `src/scss`. В ней создадим файл `style.scss`, например, со следующим содержимым:
 
 ```scss
 $font-stack: -apple-system, BlinkMacSystemFont,Roboto,'Open Sans','Helvetica Neue',sans-serif;
