@@ -521,7 +521,7 @@ npm install html-cli --save-dev
 npm install copy-webpack-plugin --save-dev
 ```
 
-В файле ```webpack.config.js``` внесем изменения:
+В файле `webpack.config.js` внесем изменения:
 
 ```javascript
 ...
