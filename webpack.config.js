@@ -115,7 +115,7 @@ const config = {
 
 module.exports = (env, argv) => {
   if (argv.mode === "production") {
-    config.plugins.push(new CleanWebpackPlugin("dist"));
+    config.plugins.push(new CleanWebpackPlugin());
   }
   return config;
 };
