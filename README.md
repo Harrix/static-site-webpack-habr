@@ -1,6 +1,6 @@
 # static-site-webpack-habr
 
-![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habr/master/docs/img/thumbnail.png)
+![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habr/master/img/featured-image.png)
 
 Демонстрация сборки статического сайта с помощью `Webpack`.
 
