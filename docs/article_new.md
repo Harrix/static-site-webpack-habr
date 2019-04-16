@@ -42,3 +42,32 @@
 ├── package.json         - файл настроек Node.js
 └── webpack.config.js    - файл настроек Webpack
 ```
+
+Та же структура, но с показом файлов, которые присутствуют в примере:
+
+```text
+.
+├── dist
+├─┬ src
+│ ├─┬ favicon
+│ │ └── favicon.ico
+│ ├─┬ fonts
+│ │ └── Roboto-Regular.ttf
+│ ├─┬ html
+│ │ ├─┬ includes
+│ │ │ ├── footer.html
+│ │ │ └── header.html
+│ │ └─┬ views
+│ │   ├── index.html
+│ │   └── second.html
+│ ├─┬ img
+│ │ └── logo.svg
+│ ├─┬ js
+│ │ └── index.js
+│ ├─┬ scss
+│ │ └── style.scss
+│ └─┬ uploads
+│   └── test.jpg
+├── package.json
+└── webpack.config.js
+```
