@@ -68,6 +68,7 @@
 │ │ └── style.scss
 │ └─┬ uploads
 │   └── test.jpg
+├── package-lock.json
 ├── package.json
 └── webpack.config.js
 ```
