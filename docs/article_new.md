@@ -50,6 +50,7 @@
 ```text
 .
 ├── dist
+├── docs
 ├─┬ src
 │ ├─┬ favicon
 │ │ └── favicon.ico
