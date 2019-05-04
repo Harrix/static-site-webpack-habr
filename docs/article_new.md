@@ -72,3 +72,5 @@
 ├── package.json
 └── webpack.config.js
 ```
+
+При установке пакетов у вас появятся папка `node_modules` с установленными пакетами, на основании информации из файлов `package.json` и `package-lock.json`.
