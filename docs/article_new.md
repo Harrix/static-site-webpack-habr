@@ -97,3 +97,23 @@ npm init
 ```console
 npm install webpack webpack-cli webpack-dev-server --save-dev
 ```
+
+Файл package.json сейчас выглядит примерно так:
+
+```json
+{
+  "name": "static-site-webpack-habr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "^3.1.1"
+  }
+}
+```
