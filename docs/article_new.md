@@ -98,7 +98,7 @@ npm init
 npm install webpack webpack-cli webpack-dev-server --save-dev
 ```
 
-Файл `package.json` сейчас выглядит примерно так:
+Файл `package.json` сейчас выглядит примерно так (версии пакетов у вас скорее всего будут другими):
 
 ```json
 {
