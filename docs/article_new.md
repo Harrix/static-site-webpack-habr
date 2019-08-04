@@ -103,7 +103,7 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
 ```json
 {
   "name": "static-site-webpack-habr",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
