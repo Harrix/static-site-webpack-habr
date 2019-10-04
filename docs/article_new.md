@@ -113,7 +113,7 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
   "devDependencies": {
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.1"
+    "webpack-dev-server": "^3.8.2"
   }
 }
 ```
