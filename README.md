@@ -4,7 +4,7 @@
 
 Демонстрация сборки статического сайта с помощью `Webpack`.
 
-Статья (в ней прописан устаревший вариант) [https://habr.com/post/350886/](https://habr.com/post/350886/).
+Статья (в ней прописан устаревший [вариант](https://github.com/Harrix/static-site-webpack-habr/releases/tag/v1.0)) [https://habr.com/post/350886/](https://habr.com/post/350886/).
 
 Дублирование статьи [article.md](https://github.com/Harrix/static-site-webpack-habr/blob/master/docs/article.md).
 
