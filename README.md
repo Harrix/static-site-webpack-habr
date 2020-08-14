@@ -2,7 +2,7 @@
 
 ![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habr/master/img/featured-image.png)
 
-Демонстрация сборки HTML страниц с помощью `Webpack`.
+Демонстрация сборки HTML страниц (или статического сайта) с помощью `Webpack`.
 
 Статья (в ней прописан устаревший [вариант](https://github.com/Harrix/static-site-webpack-habr/releases/tag/v1.0)) [https://habr.com/post/350886/](https://habr.com/post/350886/).
 
