@@ -8,7 +8,7 @@
 
 Новая статьи [article.md](https://github.com/Harrix/static-site-webpack-habr/blob/master/docs/article.md) (в процессе написания).
 
-Лицензия: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
+Лицензия проекта: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
 
 ## Использование
 
@@ -26,4 +26,4 @@
 
 С автором можно связаться по адресу [sergienkoanton@mail.ru](mailto:sergienkoanton@mail.ru) или [http://vk.com/harrix](http://vk.com/harrix).
 
-Сайт автора, где публикуются последние новости: [http://blog.harrix.org](http://blog.harrix.org), а проекты располагаются по адресу: [http://harrix.dev](http://harrix.org).
+Сайт автора с последними последние новости: [http://blog.harrix.org](http://blog.harrix.org), а проекты располагаются по адресу: [http://harrix.dev](https://harrix.dev).
