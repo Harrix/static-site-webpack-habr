@@ -57,20 +57,21 @@ const config = {
           {
             loader: "postcss-loader",
             options: {
-              ident: "postcss",
               sourceMap: true,
-              plugins: () => [
-                require("cssnano")({
-                  preset: [
-                    "default",
-                    {
-                      discardComments: {
-                        removeAll: true,
+              postcssOptions: {
+                plugins: () => [
+                  require("cssnano")({
+                    preset: [
+                      "default",
+                      {
+                        discardComments: {
+                          removeAll: true,
+                        },
                       },
-                    },
-                  ],
-                }),
-              ],
+                    ],
+                  }),
+                ],
+              },
             },
           },
           {
