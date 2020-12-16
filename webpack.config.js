@@ -5,6 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const CssnanoPlugin = require('cssnano-webpack-plugin')
 
 function generateHtmlPlugins(templateDir) {
   const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
@@ -56,26 +57,6 @@ const config = {
             },
           },
           {
-            loader: "postcss-loader",
-            options: {
-              sourceMap: true,
-              postcssOptions: {
-                plugins: () => [
-                  require("cssnano")({
-                    preset: [
-                      "default",
-                      {
-                        discardComments: {
-                          removeAll: true,
-                        },
-                      },
-                    ],
-                  }),
-                ],
-              },
-            },
-          },
-          {
             loader: "sass-loader",
             options: {
               sourceMap: true,
@@ -114,6 +95,14 @@ const config = {
         },
       ],
     }),
+    new CssnanoPlugin({
+      sourceMap: true,
+      cssnanoOptions: {
+          preset: ['default', {
+            discardComments: { removeAll: true }
+          }]
+        }
+    })
   ].concat(htmlPlugins),
 };
 
