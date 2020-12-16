@@ -33,7 +33,7 @@ const config = {
   optimization: {
     minimizer: [
       new TerserPlugin({
-        sourceMap: true,
+        //sourceMap: true,
         extractComments: true,
       }),
     ],
