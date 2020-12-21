@@ -1,7 +1,3 @@
-import jQuery from "jquery";
-import popper from "popper.js";
-import bootstrap from "bootstrap";
+import 'bootstrap';
 
-jQuery(function() {
-  jQuery("body").css("color", "blue");
-});
+document.body.style.color = "blue";
