@@ -1,3 +1,3 @@
-import 'bootstrap';
+import "bootstrap";
 
 document.body.style.color = "blue";
