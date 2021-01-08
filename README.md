@@ -8,7 +8,7 @@
 
 Новая статьи [article.md](https://github.com/Harrix/static-site-webpack-habr/blob/master/docs/article.md) (в процессе написания).
 
-Лицензия проекта: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
+Лицензия: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
 
 ## Использование
 
