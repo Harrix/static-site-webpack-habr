@@ -10,7 +10,7 @@
     "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html"
   },
   "dependencies": {
-    "@popperjs/core": "^2.6.0",
+    "@popperjs/core": "^2.7.0",
     "bootstrap": "^5.0.0-beta1"
   },
   "devDependencies": {
