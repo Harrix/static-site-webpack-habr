@@ -4,9 +4,8 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const cssnano = require("cssnano");
 
 function generateHtmlPlugins(templateDir) {
   const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
@@ -33,9 +32,19 @@ const config = {
   devtool: "source-map",
   mode: "production",
   optimization: {
+    minimize: true,
     minimizer: [
+      new CssMinimizerPlugin({
+        minimizerOptions: {
+          preset: [
+            "default",
+            {
+              discardComments: { removeAll: true },
+            },
+          ],
+        },
+      }),
       new TerserPlugin({
-        //sourceMap: true,
         extractComments: true,
       }),
     ],
@@ -75,15 +84,6 @@ const config = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "./css/style.bundle.css",
-    }),
-    new OptimizeCSSAssetsPlugin({
-      cssProcessor: cssnano,
-      cssProcessorOptions: {
-        map: { inline: false, annotation: true },
-        discardComments: { removeAll: true },
-        safe: true,
-      },
-      canPrint: true,
     }),
     new CopyPlugin({
       patterns: [
