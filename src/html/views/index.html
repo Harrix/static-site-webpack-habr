@@ -1,9 +1,23 @@
-<% var data = {
-  title: "Заголовок | Проект",
-  author: "Harrix"
-}; %>
-<%= _.template(require('./../includes/header.html').default)(data) %>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+				content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/style.bundle.css">
+</head>
+<body>
+  <div class="container">
+    Our user:
+    <h1 id="fullName" class="title"></h1>
+  </div>
 
-<div class="container"></div>
+	<input type="text" id="userInput">
 
-<%= _.template(require('./../includes/footer.html').default)(data) %>
+	<button id="sendBtn">Send</button>
+
+  <script src="js/bundle.js"></script>
+</body>
+</html>
