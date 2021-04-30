@@ -111,7 +111,7 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
   },
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^5.30.0",
+    "webpack": "^5.36.0",
     "webpack-cli": "^4.6.0",
     "webpack-dev-server": "^3.11.2"
   }
