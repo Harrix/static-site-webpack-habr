@@ -25,8 +25,8 @@
     "raw-loader": "^4.0.2",
     "sass-loader": "^12.1.0",
     "terser-webpack-plugin": "^5.2.4",
-    "webpack": "^5.54.0",
+    "webpack": "^5.55.1",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.2.1"
+    "webpack-dev-server": "^4.3.0"
   }
 }
