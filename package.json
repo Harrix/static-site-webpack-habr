@@ -10,7 +10,7 @@
     "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html"
   },
   "dependencies": {
-    "@popperjs/core": "^2.10.1",
+    "@popperjs/core": "^2.10.2",
     "bootstrap": "^5.1.1"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "raw-loader": "^4.0.2",
     "sass-loader": "^12.1.0",
     "terser-webpack-plugin": "^5.2.4",
-    "webpack": "^5.55.1",
+    "webpack": "^5.56.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.3.0"
   }
