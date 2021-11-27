@@ -21,12 +21,12 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.5",
     "node-sass": "^6.0.1",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "raw-loader": "^4.0.2",
     "sass-loader": "^12.3.0",
     "terser-webpack-plugin": "^5.2.5",
-    "webpack": "^5.64.3",
+    "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.5.0"
+    "webpack-dev-server": "^4.6.0"
   }
 }
