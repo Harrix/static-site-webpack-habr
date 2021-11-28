@@ -21,13 +21,13 @@ function generateHtmlPlugins(templateDir) {
   });
 }
 
-const htmlPlugins = generateHtmlPlugins("./src/html/views");
+const htmlPlugins = generateHtmlPlugins("src/html/views");
 
 const config = {
   entry: ["./src/js/index.js", "./src/scss/style.scss"],
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "./js/bundle.js",
+    filename: "js/bundle.js",
   },
   devtool: "source-map",
   mode: "production",
@@ -83,25 +83,25 @@ const config = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "./css/style.bundle.css",
+      filename: "css/style.bundle.css",
     }),
     new CopyPlugin({
       patterns: [
         {
-          from: "./src/fonts",
-          to: "./fonts",
+          from: "src/fonts",
+          to: "fonts",
         },
         {
-          from: "./src/favicon",
-          to: "./favicon",
+          from: "src/favicon",
+          to: "favicon",
         },
         {
-          from: "./src/img",
-          to: "./img",
+          from: "src/img",
+          to: "img",
         },
         {
-          from: "./src/uploads",
-          to: "./uploads",
+          from: "src/uploads",
+          to: "uploads",
         },
       ],
     }),
