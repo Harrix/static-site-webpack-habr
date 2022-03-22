@@ -20,7 +20,7 @@
     "css-minimizer-webpack-plugin": "^3.4.1",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.0",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.0",
     "raw-loader": "^4.0.2",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
