@@ -22,7 +22,7 @@
     "mini-css-extract-plugin": "^2.6.0",
     "prettier": "^2.6.2",
     "raw-loader": "^4.0.2",
-    "sass": "^1.50.0",
+    "sass": "^1.50.1",
     "sass-loader": "^12.6.0",
     "terser-webpack-plugin": "^5.3.1",
     "webpack": "^5.72.0",
