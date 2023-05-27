@@ -10,20 +10,20 @@
     "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.7",
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.2.3"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "^6.7.4",
+    "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^5.5.1",
     "mini-css-extract-plugin": "^2.7.6",
     "prettier": "^2.8.8",
     "raw-loader": "^4.0.2",
     "sass": "^1.62.1",
-    "sass-loader": "^13.3.0",
+    "sass-loader": "^13.3.1",
     "terser-webpack-plugin": "^5.3.9",
     "webpack": "^5.84.1",
     "webpack-cli": "^5.1.1",
