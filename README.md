@@ -21,6 +21,3 @@
 
 Автор: Сергиенко Антон Борисович.
 
-<!-- С автором можно связаться по адресу [sergienkoanton@mail.ru](mailto:sergienkoanton@mail.ru) или [http://vk.com/harrix](http://vk.com/harrix).
-
-Сайт автора с последними новостями: [http://blog.harrix.org](http://blog.harrix.org), а проекты располагаются по адресу: [https://harrix.dev](https://harrix.dev). -->
