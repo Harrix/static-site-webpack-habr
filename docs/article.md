@@ -80,7 +80,7 @@
 
 Сделаем болванку Node.js проекта. Для этого создадим папку нашего проекта с вышеописанной структурой и перейдем в неё в командной строке, где вызовем команду для создания файла `package.json`.
 
-```console
+```shell
 npm init
 ```
 
@@ -88,7 +88,7 @@ npm init
 
 Установим три общих пакета, которые нам потребуются в любом случае: `webpack`, `webpack-cli` (работу с командной строкой в webpack вынесли в отдельный пакет) и `webpack-dev-server` (для запуска локального сервера, чтобы в браузере сразу отображались сохраненные изменения проекта).
 
-```console
+```shell
 npm install webpack webpack-cli webpack-dev-server --save-dev
 ```
 
@@ -118,38 +118,36 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
 
 Так как Webpack создан в первую очередь для сборки JS файлов, то эта часть будем самой простой. Чтобы можно было писать JavaScript в современном виде ES2015, который не поддерживается браузерами, поставим пакеты `babel-core`, `babel-loader`, `babel-preset-env`.
 
-```console
+```shell
 npm install babel-core babel-loader babel-preset-env --save-dev
 ```
 
 После создаем файл настроек `webpack.config.js` с таким содержимым:
 
 ```javascript
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-  entry: [
-    './src/js/index.js',
-  ],
+  entry: ["./src/js/index.js"],
   output: {
-    filename: './js/bundle.js'
+    filename: "./js/bundle.js",
   },
   devtool: "source-map",
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.js$/,
-        include: path.resolve(__dirname, 'src/js'),
+        include: path.resolve(__dirname, "src/js"),
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: 'env'
-          }
-        }
+            presets: "env",
+          },
+        },
       },
-    ]
+    ],
   },
-  plugins: [
-  ]
+  plugins: [],
 };
 ```
 
@@ -161,7 +159,7 @@ module.exports = {
 
 В нашем тестовом примере мы верстаем наши странице на [Boostrap 4](https://getbootstrap.com/). Поэтому нам нужно будет установить три пакета: `bootstrap`, `jquery`, `popper.js`. Второй и третий пакет мы устанавливаем по требованию Bootstrap.
 
-```console
+```shell
 npm install bootstrap jquery popper.js --save
 ```
 
@@ -170,12 +168,12 @@ npm install bootstrap jquery popper.js --save
 Теперь можно приступить к написанию нашего `index.js` файла:
 
 ```javascript
-import jQuery from 'jquery';
-import popper from 'popper.js';
-import bootstrap from 'bootstrap';
+import jQuery from "jquery";
+import popper from "popper.js";
+import bootstrap from "bootstrap";
 
-jQuery(function() {
-    jQuery('body').css('color', 'blue');
+jQuery(function () {
+  jQuery("body").css("color", "blue");
 });
 ```
 
@@ -204,7 +202,7 @@ jQuery(function() {
 
 Пришлось отказаться от `clean-webpack-plugin`. Почему? Когда запускаешь сервер через команду `npm run start` (`webpack serve`), то webpack компилирует файлы автоматом, не сохраняя их в папку `dist`. И это нормально. Но при этом папка `dist` очищается из-за наличия `clean-webpack-plugin`. В результате в режиме работы локального сервера папка `dist` пустует, что негативно сказывается на работе с git (только в случае, если вы в git репозиторий сохраняется сборку проекта, как и я): после каждого запуска сервера появляется куча изменений из-за удаленных файлов. Было бы хорошо, чтобы очистка папки `dist` происходила только при полноценной сборке, например, `npm run build-and-beautify` (об этой команде ниже). Плагин `clean-webpack-plugin` настроить нужным способом не смог. Поэтому использую другой плагин `del-cli`, который не связан с webpack и работает отдельно.
 
-```console
+```shell
 npm install del-cli --save-dev
 ```
 
@@ -226,12 +224,12 @@ npm install del-cli --save-dev
 CSS файл будем собирать из SCSS файлов, под которые у нас зарезервирована папка `src/scss`. В ней создадим файл `style.scss`, например, со следующим содержимым:
 
 ```scss
-$font-stack: -apple-system, BlinkMacSystemFont,Roboto,'Open Sans','Helvetica Neue',sans-serif;
+$font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
 
 @import "~bootstrap/scss/bootstrap";
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/Roboto-Regular.ttf);
@@ -256,13 +254,13 @@ body {
 
 Важно! На момент написания статьи плагин `extract-text-webpack-plugin` в стабильной версии не умеет работать с Webpack 4. Поэтому нужно устанавливать его beta версию через `@next`:
 
-```console
+```shell
 npm install node-sass sass-loader css-loader extract-text-webpack-plugin@next --save-dev
 ```
 
 Надеюсь, что вскоре можно будет устанавливать все плагины по нормальному:
 
-```console
+```shell
 npm install node-sass sass-loader css-loader extract-text-webpack-plugin --save-dev
 ```
 
@@ -321,7 +319,7 @@ module.exports = {
 
 И самый спорный момент. Для пакета `css-loader` мы добавили параметр `url`, равный `false`. Зачем? По умолчанию `url=true`, и если Webpack при сборке CSS находит ссылки на внешние файлы: фоновые изображения, шрифты (например, в нашем случае есть ссылка на файл шрифта `url(../fonts/Roboto-Regular.ttf)`), то он эти файлы попросит как-то обработать. Для этого используют чаще всего пакеты `file-loader` (копирует файлы в папку сборки) или `url-loader` (маленькие файлы пытается встроить в HTML код). При этом прописанные относительные пути к файлам в собранном CSS могут быть изменены.
 
-Но с какой проблемой столкнулся на практике. Есть у меня папка `src/scss` с SСSS кодом. Есть папка `src/img` с картинками, на которые ссылаются в SСSS  коде. Всё хорошо. Но, например, мне потребовалось подключить на сайт стороннюю библиотеку (например, lightgallery). SCSS код у неё располагается в папке `node_modules/lightgallery/src/sass`, который ссылается на картинки из папки `node_modules/lightgallery/src/img` через относительные пути. И если добавить стили библиотеки в наш `style.scss`, то `file-loader` будет искать картинки библиотеки `lightgallery` в моей папке `src/img`, а не там, где они находятся. И побороть я это не смог.
+Но с какой проблемой столкнулся на практике. Есть у меня папка `src/scss` с SСSS кодом. Есть папка `src/img` с картинками, на которые ссылаются в SСSS коде. Всё хорошо. Но, например, мне потребовалось подключить на сайт стороннюю библиотеку (например, lightgallery). SCSS код у неё располагается в папке `node_modules/lightgallery/src/sass`, который ссылается на картинки из папки `node_modules/lightgallery/src/img` через относительные пути. И если добавить стили библиотеки в наш `style.scss`, то `file-loader` будет искать картинки библиотеки `lightgallery` в моей папке `src/img`, а не там, где они находятся. И побороть я это не смог.
 
 **Update.** С последней проблемой можно справиться, как подсказал [Odrin](https://habr.com/ru/users/odrin/), с помощью пакета [resolve-url-loader](https://github.com/bholloway/resolve-url-loader) и file-loader.
 
@@ -385,18 +383,15 @@ module.exports = {
 
 Для сборки HTML страниц будем использовать плагин `html-webpack-plugin`, который поддерживает различные виды шаблонизаторов. Также нам потребуются пакет `raw-loader`.
 
-```console
+```shell
 npm install html-webpack-plugin raw-loader --save-dev
 ```
 
 В качестве шаблонизатора HTML будем использовать шаблонизатор по умолчанию lodash. Вот так будет выглядеть типичная HTML страница до сборки:
 
 ```html
-<% var data = {
-  title: "Заголовок | Проект",
-  author: "Harrix"
-}; %>
-<%= _.template(require('./../includes/header.html'))(data) %>
+<% var data = { title: "Заголовок | Проект", author: "Harrix" }; %> <%=
+_.template(require('./../includes/header.html'))(data) %>
 
 <p>text</p>
 
@@ -408,7 +403,7 @@ npm install html-webpack-plugin raw-loader --save-dev
 **Важное уточнение.** В статьях про сборку HTML страниц через `html-webpack-plugin` обычно подключают встраиваемые шаблоны просто через команду:
 
 ```javascript
-require('html-loader!./../includes/header.html')
+require("html-loader!./../includes/header.html");
 ```
 
 Но при этом в этих встраиваемых шаблонах синтаксис lodash работать не будет (так и не понял, почему так происходит). И данные из переменной `data` туда не передадутся. Поэтому принудительно говорим webpack, что мы встраиваем именно шаблон, который надо обработать как lodash шаблон.
@@ -419,28 +414,31 @@ require('html-loader!./../includes/header.html')
 <!doctype html>
 <html lang="ru">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <link rel="shortcut icon" href="favicon/favicon.ico">
-    <link rel="stylesheet" href="css/style.bundle.css">
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="stylesheet" href="css/style.bundle.css" />
 
     <title><%=title%></title>
   </head>
   <body>
-    <header><img src="img/logo.svg" id="logo"></header>
+    <header><img src="img/logo.svg" id="logo" /></header>
+  </body>
+</html>
 ```
 
 В пакете html-webpack-plugin [есть возможность](https://github.com/jantimon/html-webpack-plugin#generating-multiple-html-files) генерировать несколько HTML страниц:
 
 ```javascript
- plugins: [
-    new HtmlWebpackPlugin(), // Generates default index.html
-    new HtmlWebpackPlugin({  // Also generate a test.html
-      filename: 'test.html',
-      template: 'src/assets/test.html'
-    })
-  ]
+plugins: [
+  new HtmlWebpackPlugin(), // Generates default index.html
+  new HtmlWebpackPlugin({
+    // Also generate a test.html
+    filename: "test.html",
+    template: "src/assets/test.html",
+  }),
+];
 ```
 
 Но прописывать для каждой страницы создание своего экземпляра плагина точно не есть хорошо. Поэтому автоматизируем этот процесс, найдя все HTML файлы в папке `src/html/views` и создадим для них свои версии `new HtmlWebpackPlugin()`.
@@ -494,7 +492,7 @@ module.exports = {
 
 Устанавливаем этот плагин:
 
-```console
+```shell
 npm install html-cli --save-dev
 ```
 
@@ -515,7 +513,7 @@ npm install html-cli --save-dev
 
 Мы получили JS, CSS файлы, HTML страницы. Остались файлы изображений, шрифтов и др., которые мы не трогали и сознательно не копировали через `file-loader` или `url-loader`. Поэтому скопируем все оставшиеся папки через плагин `copy-webpack-plugin`:
 
-```console
+```shell
 npm install copy-webpack-plugin --save-dev
 ```
 
