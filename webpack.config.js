@@ -142,7 +142,8 @@ const config = {
     new MiniCssExtractPlugin({
       filename: "css/style.bundle.css",
     }),
-    // CopyPlugin copies static files that are not imported in code
+    // CopyPlugin copies static files referenced in HTML templates
+    // These files are not imported in JavaScript code, so they need to be copied
     new CopyPlugin({
       patterns: [
         {
