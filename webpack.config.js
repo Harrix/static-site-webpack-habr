@@ -1,6 +1,5 @@
 const path = require("path");
 const fs = require("fs");
-// CleanWebpackPlugin больше не нужен - используем встроенную опцию clean: true
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -16,8 +15,8 @@ function generateHtmlPlugins(templateDir) {
     return new HtmlWebpackPlugin({
       filename: `${name}.html`,
       template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
-      inject: true, // Автоматически вставляет скрипты и стили
-      scriptLoading: "blocking", // Блокирующая загрузка скриптов
+      inject: true, // Automatically injects scripts and styles
+      scriptLoading: "blocking", // Blocking script loading
     });
   });
 }
@@ -29,8 +28,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "js/bundle.js",
-    clean: true, // Заменяет CleanWebpackPlugin в Webpack 5
-    assetModuleFilename: "assets/[name][ext]", // Для встроенных модулей ресурсов
+    clean: true, // Replaces CleanWebpackPlugin in Webpack 5
+    assetModuleFilename: "assets/[name][ext]", // For built-in asset modules
   },
   devtool: "source-map",
   mode: "production",
@@ -60,7 +59,7 @@ const config = {
         extractComments: true,
         terserOptions: {
           compress: {
-            drop_console: true, // Удаляет console.log в production
+            drop_console: true, // Removes console.log in production
           },
         },
       }),
@@ -108,20 +107,20 @@ const config = {
         include: path.resolve(__dirname, "src/html/includes"),
         use: ["raw-loader"],
       },
-      // Обработка изображений с помощью встроенных модулей Webpack 5
+      // Image processing using Webpack 5 built-in modules
       {
         test: /\.(png|jpe?g|gif|svg|webp|avif)$/i,
         type: "asset",
         parser: {
           dataUrlCondition: {
-            maxSize: 8 * 1024, // 8kb - файлы меньше будут встроены как data URL
+            maxSize: 8 * 1024, // 8kb - files smaller will be embedded as data URL
           },
         },
         generator: {
           filename: "img/[name][ext]",
         },
       },
-      // Обработка шрифтов
+      // Font processing
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: "asset/resource",
@@ -129,7 +128,7 @@ const config = {
           filename: "fonts/[name][ext]",
         },
       },
-      // Обработка других файлов (ico, etc.)
+      // Processing other files (ico, etc.)
       {
         test: /\.(ico|pdf)$/i,
         type: "asset/resource",
@@ -143,7 +142,7 @@ const config = {
     new MiniCssExtractPlugin({
       filename: "css/style.bundle.css",
     }),
-    // CopyPlugin копирует статические файлы, которые не импортируются в коде
+    // CopyPlugin copies static files that are not imported in code
     new CopyPlugin({
       patterns: [
         {
@@ -172,21 +171,21 @@ const config = {
 };
 
 module.exports = (env, argv) => {
-  // Настройки для production
+  // Production settings
   if (argv.mode === "production") {
     config.output.filename = "js/[name].js";
     config.output.assetModuleFilename = "assets/[name][ext]";
 
-    // Отключаем хеши для совместимости с внешними проектами
+    // Disable hashes for compatibility with external projects
     config.optimization.moduleIds = "named";
     config.optimization.chunkIds = "named";
   } else {
-    // Настройки для development
+    // Development settings
     config.devtool = "eval-source-map";
     config.optimization.minimize = false;
     config.output.filename = "js/bundle.js";
     config.output.assetModuleFilename = "assets/[name][ext]";
-    // Отключаем code splitting в development для простоты
+    // Disable code splitting in development for simplicity
     config.optimization.splitChunks = false;
     config.optimization.runtimeChunk = false;
   }
