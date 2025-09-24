@@ -1,7 +1,12 @@
+// Custom variables
 $font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+$logo-width: 10rem;
+$container-img-width: 20rem;
 
+// Bootstrap import
 @import "~bootstrap/scss/bootstrap";
 
+// Font definitions
 @font-face {
   font-family: "Roboto";
   font-style: normal;
@@ -9,14 +14,17 @@ $font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica 
   src: url(../fonts/Roboto-Regular.ttf);
 }
 
+// Custom styles
 body {
   font-family: $font-stack;
+
   #logo {
-    width: 10rem;
+    width: $logo-width;
   }
+
   .container {
     img {
-      width: 20rem;
+      width: $container-img-width;
     }
   }
 }
