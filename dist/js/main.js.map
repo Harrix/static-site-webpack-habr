@@ -1,0 +1,1 @@
+{"version":3,"file":"js/main.js","mappings":"4MAEAA,SAASC,KAAKC,MAAMC,MAAQ,M","sources":["webpack://static-site-webpack-habr/./src/js/index.js"],"sourcesContent":["import \"bootstrap\";\r\n\r\ndocument.body.style.color = \"blue\";\r\n"],"names":["document","body","style","color"],"sourceRoot":""}
