@@ -9,14 +9,14 @@ const TerserPlugin = require("terser-webpack-plugin");
 function generateHtmlPlugins(templateDir) {
   const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
   return templateFiles.map((item) => {
-    const parts = item.split(".");
-    const name = parts[0];
-    const extension = parts[1];
+    const parsedPath = path.parse(item);
+    const name = parsedPath.name;
+    const extension = parsedPath.ext.substring(1); // Remove the dot from extension
     return new HtmlWebpackPlugin({
       filename: `${name}.html`,
       template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
       inject: true, // Automatically injects scripts and styles
-      scriptLoading: "blocking", // Blocking script loading
+      scriptLoading: "blocking",
     });
   });
 }
