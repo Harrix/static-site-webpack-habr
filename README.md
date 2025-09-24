@@ -2,21 +2,21 @@
 
 ![Webpack](https://raw.githubusercontent.com/Harrix/static-site-webpack-habr/master/img/featured-image.png)
 
-Демонстрация сборки HTML страниц (или статического сайта) с помощью `Webpack`.
+Demonstration of building HTML pages (or static site) using `Webpack`.
 
-Статья (в ней прописан устаревший [вариант](https://github.com/Harrix/static-site-webpack-habr/releases/tag/v1.0)) [https://habr.com/ru/articles/350886/](https://habr.com/post/350886/).
+Article (contains outdated [version](https://github.com/Harrix/static-site-webpack-habr/releases/tag/v1.0)) [https://habr.com/ru/articles/350886/](https://habr.com/post/350886/).
 
-Новая статьи: [article.md](https://github.com/Harrix/static-site-webpack-habr/blob/master/docs/article.md) (в процессе долгого написания).
+New article: [article.md](https://github.com/Harrix/static-site-webpack-habr/blob/master/docs/article.md) (in the process of long writing).
 
-Лицензия: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
+License: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/master/LICENSE.md).
 
-## Использование
+## Usage
 
-1. Установите программу [Node.js](https://nodejs.org/en/).
-2. Создайте директорию (например, 'C:\projects\test'), в которой будете создавать своей проект.
-3. В командной строке (например, 'cmd' или 'PowerShell') перейдите в эту папку.
-4. Скопируйте в папку файлы из данного проекта.
+1. Install [Node.js](https://nodejs.org/en/).
+2. Create a directory (e.g., 'C:\projects\test') where you will create your project.
+3. In the command line (e.g., 'cmd' or 'PowerShell') navigate to this folder.
+4. Copy the files from this project into the folder.
 
-## Автор
+## Author
 
-Автор: Сергиенко Антон Борисович.
+Author: Sergienko Anton Borisovich.
