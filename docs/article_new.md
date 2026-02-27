@@ -1,57 +1,53 @@
-# Простой статический сайт на webpack 5
+# Простой статический сайт на Webpack 5
 
-Данная статья является документацией к проекту [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). С помощью пакета webpack под Node.js и других пакетов, включая HTML шаблонизатор, создается набор HTML страниц, которые удобно использовать для тестирования HTML шаблонов или для генерации простого статического сайта.
+Данная статья является документацией к проекту [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). С помощью пакета Webpack под Node.js и других пакетов, включая HTML-шаблонизатор, создаётся набор HTML-страниц, которые удобно использовать для тестирования HTML-шаблонов или для генерации простого статического сайта.
 
-На Хабре находится устаревшая версия этой [статьи](https://habr.com/ru/post/350886/). За это время некоторые подходы изменились, некоторые пакеты обновились, а некоторые пакеты устарели. Так что в этой статье представлен сильно переработанный вариант того материала.
+На Хабре находится устаревшая версия этой [статьи](https://habr.com/ru/post/350886/). За это время некоторые подходы изменились, часть пакетов обновилась, часть устарела. В этой статье представлен переработанный вариант того материала под текущее состояние проекта.
 
 ## Постановка задачи
 
-«Сайт» представляет собой простой набор HTML страниц со своими CSS стилями и файлом JavaScript. Необходимо написать проект, который бы собирал наш сайт из исходников:
+Сайт представляет собой простой набор HTML-страниц со своими CSS-стилями и файлом JavaScript. Нужно собрать сайт из исходников:
 
-- из SASS (точнее [SCSS](https://sass-lang.com/documentation/syntax)) файлов формируется один CSS файл;
-- из различных JavaScript библиотек и пользовательского кода формируется один JavaScript файл;
-- HTML страницы собираются с помощью шаблонов, где содержимое шапки и футера можно разнести по отдельным файлам.
+- из SASS (точнее [SCSS](https://sass-lang.com/documentation/syntax)) формируется один CSS-файл;
+- из библиотек и пользовательского кода формируется один (или несколько) JavaScript-файл;
+- HTML-страницы собираются по шаблонам, где шапка и футер вынесены в отдельные файлы.
 
 <details>
 <summary>Что не используем</summary>
 
-В собранном сайте не используются, например, [React](https://reactjs.org), [Vue.js](https://vuejs.org/), [Angular](https://angularjs.org/) или другие подобные фреймворки и библиотеки. Причина не в том, что не люблю эти фреймворки, а в том, что хочу в тестовом примере использовать универсальный подход без привязки к какому-то конкретному JavaScript фреймворку.
+В собранном сайте не используются [React](https://reactjs.org), [Vue.js](https://vuejs.org/), [Angular](https://angularjs.org/) и подобные фреймворки. Цель примера — универсальный подход без привязки к конкретному JS-фреймворку.
 
-При выборе технологий выбираются по возможности наиболее популярные на текущий момент. По этой причине отказался и от [Grunt](https://gruntjs.com/), и [Gulp](https://gulpjs.com/) в пользу [webpack](https://webpack.js.org), хотя, если честно, синтаксис Gulp мне понравился больше своим однообразием при составлении скриптов.
+В качестве сборщика выбран [Webpack](https://webpack.js.org/), а не Grunt или Gulp.
 
 </details>
 
-Будем использовать для сборки [webpack](https://webpack.js.org/).
+Для примера сверстано несколько страниц на базе [Bootstrap 5](https://getbootstrap.com). Это только пример, можно использовать любой другой фреймворк или писать стили сами.
 
-Для примера будет сверстано несколько страниц на базе CSS фреймворка [Bootstrap 5](https://getbootstrap.com). Но это только для примера, и вы можете спокойно использовать любой другой CSS движок (например, [Bulma](https://bulma.io)) или не использовать вообще никакой, и всё писать самому.
+Предполагается, что [Node.js](https://nodejs.org) установлен и вы умеете работать с командной строкой (в Windows — `cmd` или PowerShell).
 
-Предполагается, что [Node.js](https://nodejs.org) у вас уже установлен (в Windows просто нужно скачать файл-установщик и установить в стиле «далее, далее»), и вы умеете работать с командной строкой [CLI](https://ru.wikipedia.org/wiki/Интерфейс_командной_строки) (в Windows это `cmd` или `PowerShell`).
-
-Нужно получить в итоге набор готовых HTML страниц, которые можно залить на любой хостинг без дополнительных действий (например, на [GitHub Pages](https://pages.github.com/)) или открыть локально на компьютере без поднятия сервера.
+В итоге нужен набор готовых HTML-страниц для заливки на хостинг (например, [GitHub Pages](https://pages.github.com/)) или для локального просмотра.
 
 ## Структура проекта
 
-Общая структура проекта представлена ниже:
-
 ```text
 .
-├── dist                 - папка, куда будет собираться итоговый сайт
-├─┬ src                  - папка с исходниками сайта
-│ ├── favicon            - папка с файлами иконок для сайта
-│ ├── fonts              - папка со шрифтами
-│ ├─┬ html               - папка шаблонов HTML страниц
-│ │ ├── includes         - папка с встраиваемыми шаблонами (header, footer и др.)
-│ │ └── views            - папка с самими HTML страницами (без header, footer и др.)
-│ ├── img                - папка с общими изображениями (логотип, иконки и др.)
-│ ├── js                 - папка с JavaScript файлами
-│ ├── scss               - папка с SСSS файлами стилей
-│ └── uploads            - папка с файлами статей (картинки, архивы и др.)
-├── package-lock.json    - файл со списком версий пакетов (редактируется автоматически)
-├── package.json         - файл настроек Node.js
-└── webpack.config.js    - файл настроек webpack
+├── dist                 - папка, куда собирается итоговый сайт
+├─┬ src                  - папка с исходниками
+│ ├── favicon            - иконки для сайта
+│ ├── fonts              - шрифты
+│ ├─┬ html
+│ │ ├── includes        - встраиваемые шаблоны (header, footer)
+│ │ └── views           - сами HTML-страницы (контент без шапки/футера)
+│ ├── img                - общие изображения (логотип, иконки)
+│ ├── js                 - JavaScript
+│ ├── scss               - SCSS-стили
+│ └── uploads            - файлы статей (картинки, архивы)
+├── package-lock.json
+├── package.json
+└── webpack.config.js
 ```
 
-Ниже приведена та же структура проекта, но с отображением файлов, которые присутствуют в примере данной статьи:
+С файлами из примера:
 
 ```text
 .
@@ -81,53 +77,314 @@
 └── webpack.config.js
 ```
 
-Спорным решением может показаться разделение файлов изображений на две папки: `img` и `uploads`. Так как на мой взгляд размещать все изображения в одной папке — это не очень хороший подход.
+Папку `node_modules` в репозиторий не добавляют (её обычно указывают в `.gitignore`).
 
-<details>
-<summary>Про дополнительные файлы</summary>
-
-В папке проекта [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr) находятся также дополнительные служебные файлы и папки (например, `docs` с документацией к проекту, файл `README.md` с описанием проекта в формате Markdown и др.). Но эти остальные файлы и папки несут служебную функцию, так что можно копировать в свой проект только вышеприведенные файлы.
-
-</details>
-
-При установке пакетов появится папка `node_modules` с устанавливаемыми пакетами на основании информации из файлов `package.json` и `package-lock.json` (второй файл вы сами не трогаете, так как он генерируется самим Node.js на основании первого файла `package.json`). Эту папку не надо заливать, например, на GitHub через коммиты (через `.gitignore`). С ней вручную вообще лучше ничего не делать.
-
-Для работы с проектом использую текстовой редактор [Visual Studio Code](https://code.visualstudio.com/), которым крайне доволен. Особенно нравится, что командная строка встроена в саму программу и вызывается через комбинацию клавиш `Ctrl` + `` ` ``.
-
-![Visual Studio Code с встроенной командной строкой](img/visual_studio_code.png)
-
-Сделаем шаблон Node.js нашего проекта. Для этого создадим папки проекта с вышеописанной структурой (`dist`, `src` и так далее), перейдем в неё в командной строке, где вызовем команду для создания файла `package.json`:
+Создаём папки проекта, переходим в корень проекта в командной строке и инициализируем npm:
 
 ```shell
 npm init
 ```
 
-На предложенные вопросы можно не отвечать, нажимая клавишу `Enter`, если не хочется заполнять подробную информацию о проекте (он у нас же тестовый проект).
-
-После этого установим пакеты общего назначения, которые потребуются в любом случае: `webpack`, `webpack-cli` (работу с командной строкой в webpack вынесли в отдельный пакет) и `webpack-dev-server` (для запуска локального сервера на вашем компьютере, чтобы изменения сразу отображались в браузере):
+Устанавливаем Webpack и связанные пакеты:
 
 ```shell
 npm install webpack webpack-cli webpack-dev-server --save-dev
 ```
 
-Файл `package.json` на данном этапе выглядит примерно так (версии пакетов у вас будут другими, так как они регулярно обновляться):
+На этом этапе `package.json` может выглядеть так (версии пакетов могут отличаться):
 
 ```json
 {
   "name": "static-site-webpack-habr",
   "version": "2.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "HTML template",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "ISC",
   "devDependencies": {
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
+    "webpack": "^5.105.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.3"
   }
 }
 ```
 
-## Собираем JavaScript
+## Сборка JavaScript
+
+Точка входа — `src/js/index.js`. В проекте не используется Babel: современный синтаксис поддерживается целевой конфигурацией Webpack и браузеров.
+
+Для примера подключён Bootstrap 5 (и по необходимости — Popper.js как зависимость Bootstrap):
+
+```shell
+npm install bootstrap @popperjs/core
+```
+
+Пример `src/js/index.js`:
+
+```javascript
+import "bootstrap";
+
+document.body.style.color = "blue";
+```
+
+В Webpack 5 выходной путь и очистка задаются в `output`:
+
+```javascript
+output: {
+  path: path.resolve(__dirname, "dist"),
+  filename: "js/bundle.js",
+  clean: true,
+}
+```
+
+Параметр `clean: true` перед каждой сборкой очищает папку `dist`, отдельный плагин для этого не нужен.
+
+В `package.json` добавляем скрипты:
+
+```json
+"scripts": {
+  "dev": "webpack --mode development",
+  "watch": "webpack --mode development --watch",
+  "start": "webpack serve --no-client-overlay-warnings",
+  "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html"
+}
+```
+
+- **npm run dev** — однократная сборка в режиме разработки.
+- **npm run watch** — сборка при изменении файлов.
+- **npm run start** — запуск dev-сервера (по умолчанию порт 9000), с открытием браузера и hot reload.
+- **npm run build** — production-сборка и форматирование HTML в `dist` через Prettier.
+
+## Сборка CSS
+
+Стили собираются из SCSS. Используется реализация [sass](https://www.npmjs.com/package/sass) (Dart Sass), а не устаревший `node-sass`.
+
+```shell
+npm install sass sass-loader css-loader mini-css-extract-plugin --save-dev
+```
+
+В Webpack 5 для выноса CSS в отдельный файл используется [mini-css-extract-plugin](https://webpack.js.org/plugins/mini-css-extract-plugin/); плагин `extract-text-webpack-plugin` больше не применяется.
+
+Пример `src/scss/style.scss`:
+
+```scss
+$font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+$logo-width: 10rem;
+$container-img-width: 20rem;
+
+@import "bootstrap/scss/bootstrap";
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/Roboto-Regular.ttf);
+}
+
+body {
+  font-family: $font-stack;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  #logo {
+    width: $logo-width;
+  }
+
+  .container img {
+    width: $container-img-width;
+  }
+}
+```
+
+Bootstrap подключается через его SCSS (`@import "bootstrap/scss/bootstrap"`), чтобы при необходимости переопределять переменные и миксины.
+
+В `webpack.config.js` добавляем правило для SCSS и плагин:
+
+```javascript
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+// В entry добавляем:
+entry: ["./src/js/index.js", "./src/scss/style.scss"],
+
+// В module.rules:
+{
+  test: /\.(sass|scss)$/,
+  include: path.resolve(__dirname, "src/scss"),
+  use: [
+    { loader: MiniCssExtractPlugin.loader },
+    {
+      loader: "css-loader",
+      options: { sourceMap: true, url: false },
+    },
+    {
+      loader: "sass-loader",
+      options: {
+        implementation: require("sass"),
+        sourceMap: true,
+      },
+    },
+  ],
+},
+
+// В plugins:
+new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
+```
+
+Параметр `url: false` у `css-loader` отключает обработку `url()` в CSS (шрифты, картинки). Пути к таким файлам не меняются, копированием занимается отдельно CopyPlugin (см. ниже). Так проще избежать путаницы с путями из `node_modules` и своих папок.
+
+Для минификации CSS в production используется `css-minimizer-webpack-plugin`:
+
+```shell
+npm install css-minimizer-webpack-plugin terser-webpack-plugin --save-dev
+```
+
+В конфиге они подключаются в `optimization.minimizer` (см. итоговый пример ниже).
+
+## Сборка HTML-страниц
+
+Для HTML используется [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) с шаблонизатором lodash (идущим в комплекте с плагином).
+
+Устанавливаем плагин:
+
+```shell
+npm install html-webpack-plugin --save-dev
+```
+
+Страницы лежат в `src/html/views`. Каждая страница задаёт переменные и подключает общие шапку и футер. Пример `src/html/views/index.html`:
+
+```html
+<% var data = {
+  title: "Заголовок | Проект",
+  description: "Первая страница проекта — сборка статического сайта на Webpack",
+  author: "Harrix"
+}; %>
+<%= _.template(require('./../includes/header.html'))(data) %>
+
+<div class="container">Первая страница.</div>
+
+<%= _.template(require('./../includes/footer.html'))(data) %>
+```
+
+В `data` передаются переменные страницы (title, description, author и т.д.). Шаблоны из `includes` подключаются через `_.template(require(...))(data)`.
+
+Важно: подключать нужно именно так (шаблон через `require` и lodash), а не через `html-loader`, иначе в подключаемых файлах не будет работать синтаксис lodash и переменные из `data`.
+
+Пример `src/html/includes/header.html`:
+
+```html
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Статический сайт на Webpack' %>" />
+
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+
+    <title><%= title %></title>
+  </head>
+  <body>
+    <header><img src="img/logo.svg" id="logo" alt="Логотип" /></header>
+    <main>
+```
+
+Файлы из `includes` должны загружаться как исходный текст. В Webpack 5 для этого используют встроенный тип `asset/source` (вместо отдельного `raw-loader`):
+
+```javascript
+{
+  test: /\.html$/,
+  include: path.resolve(__dirname, "src/html/includes"),
+  type: "asset/source",
+}
+```
+
+Чтобы не создавать вручную экземпляр плагина для каждой страницы, список HTML-файлов собирают из папки `src/html/views`:
+
+```javascript
+const fs = require("fs");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+function generateHtmlPlugins(templateDir) {
+  const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
+  return templateFiles.map((item) => {
+    const parsedPath = path.parse(item);
+    const name = parsedPath.name;
+    const extension = parsedPath.ext.substring(1);
+    return new HtmlWebpackPlugin({
+      filename: `${name}.html`,
+      template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
+      inject: "body",
+      scriptLoading: "defer",
+    });
+  });
+}
+
+const htmlPlugins = generateHtmlPlugins("src/html/views");
+
+// В plugins:
+plugins: [/* ... */].concat(htmlPlugins),
+```
+
+С опцией `inject: "body"` плагин сам добавит в конец `<body>` ссылки на собранные JS и CSS, поэтому в шаблонах их прописывать не нужно.
+
+Форматирование готовых HTML-файлов выполняется командой **npm run build** через Prettier (см. скрипт `build` в `package.json`). Отдельный пакет вроде `html-cli` не используется.
+
+## Копирование статических файлов
+
+Изображения, шрифты, favicon и файлы из `uploads` не проходят через JS/SCSS, поэтому копируются плагином [copy-webpack-plugin](https://webpack.js.org/plugins/copy-webpack-plugin/):
+
+```shell
+npm install copy-webpack-plugin --save-dev
+```
+
+В Webpack 5 используется новый API с `patterns`:
+
+```javascript
+const CopyPlugin = require("copy-webpack-plugin");
+
+plugins: [
+  // ...
+  new CopyPlugin({
+    patterns: [
+      { from: "src/fonts", to: "fonts", noErrorOnMissing: true },
+      { from: "src/favicon", to: "favicon", noErrorOnMissing: true },
+      { from: "src/img", to: "img", noErrorOnMissing: true },
+      { from: "src/uploads", to: "uploads", noErrorOnMissing: true },
+    ],
+  }),
+],
+```
+
+`noErrorOnMissing: true` не даёт сборке падать, если какой-то из каталогов отсутствует.
+
+## Режим разработки и production
+
+В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` можно менять настройки в зависимости от `argv.mode`:
+
+- в development отключают минификацию и code splitting для быстрой сборки;
+- в production включают `CssMinimizerPlugin`, `TerserPlugin`, при необходимости `splitChunks` и `runtimeChunk`.
+
+Для ускорения повторных сборок используется кэш на диске:
+
+```javascript
+cache: {
+  type: "filesystem",
+  buildDependencies: { config: [__filename] },
+},
+```
+
+Dev-сервер настроен так:
+
+```javascript
+devServer: {
+  static: { directory: path.join(__dirname, "dist") },
+  port: 9000,
+  hot: true,
+  open: true,
+  watchFiles: ["src/**/*"],
+},
+```
+
+Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML; результат лежит в папке `dist`.
