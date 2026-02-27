@@ -1,2 +1,2 @@
-"use strict";(self.webpackChunkstatic_site_webpack_habr=self.webpackChunkstatic_site_webpack_habr||[]).push([["main"],{"./src/js/index.js":(s,e,c)=>{c("./node_modules/bootstrap/dist/js/bootstrap.esm.js");document.body.style.color="blue"},"./src/scss/style.scss":()=>{}},s=>{var e=e=>s(s.s=e);s.O(0,["vendors"],()=>(e("./src/js/index.js"),e("./src/scss/style.scss")));s.O()}]);
+"use strict";(self.webpackChunkstatic_site_webpack_habr=self.webpackChunkstatic_site_webpack_habr||[]).push([["main"],{"./src/scss/style.scss"(){},"./src/js/index.js"(s,e,c){c("./node_modules/bootstrap/dist/js/bootstrap.esm.js");document.body.style.color="blue"}},s=>{var e=e=>s(s.s=e);s.O(0,["vendors"],()=>(e("./src/js/index.js"),e("./src/scss/style.scss")));s.O()}]);
 //# sourceMappingURL=main.js.map
