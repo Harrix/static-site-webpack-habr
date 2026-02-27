@@ -2,13 +2,13 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Статический сайт на Webpack' %>" />
 
-    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
 
-    <title><%=title%></title>
+    <title><%= title %></title>
   </head>
   <body>
-    <header><img src="img/logo.svg" id="logo" /></header>
-  </body>
-</html>
+    <header><img src="img/logo.svg" id="logo" alt="Логотип" /></header>
+    <main>

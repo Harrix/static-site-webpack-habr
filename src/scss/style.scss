@@ -15,8 +15,15 @@ $container-img-width: 20rem;
 }
 
 // Custom styles
+main {
+  flex: 1;
+}
+
 body {
   font-family: $font-stack;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   #logo {
     width: $logo-width;

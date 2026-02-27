@@ -15,8 +15,8 @@ function generateHtmlPlugins(templateDir) {
     return new HtmlWebpackPlugin({
       filename: `${name}.html`,
       template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
-      inject: true, // Automatically injects scripts and styles
-      scriptLoading: "blocking",
+      inject: "body",
+      scriptLoading: "defer",
     });
   });
 }
@@ -28,7 +28,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "js/bundle.js",
-    clean: true, // Replaces CleanWebpackPlugin in Webpack 5
+    clean: true,
     assetModuleFilename: "assets/[name][ext]", // For built-in asset modules
   },
   cache: {
