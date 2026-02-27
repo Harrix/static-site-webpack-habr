@@ -31,6 +31,12 @@ const config = {
     clean: true, // Replaces CleanWebpackPlugin in Webpack 5
     assetModuleFilename: "assets/[name][ext]", // For built-in asset modules
   },
+  cache: {
+    type: "filesystem",
+    buildDependencies: {
+      config: [__filename],
+    },
+  },
   devtool: "source-map",
   mode: "production",
   devServer: {
@@ -105,7 +111,7 @@ const config = {
       {
         test: /\.html$/,
         include: path.resolve(__dirname, "src/html/includes"),
-        use: ["raw-loader"],
+        type: "asset/source",
       },
       // Image processing using Webpack 5 built-in modules
       {
