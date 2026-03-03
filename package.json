@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "HTML template",
   "sideEffects": ["*.scss", "*.css"],
-  "main": "src/index.js",
+  "main": "src/js/index.js",
   "scripts": {
     "dev": "webpack --mode development",
     "watch": "webpack --mode development --watch",
