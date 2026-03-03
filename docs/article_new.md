@@ -98,7 +98,8 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
   "name": "static-site-webpack-habr",
   "version": "2.0.0",
   "description": "HTML template",
-  "main": "src/index.js",
+  "sideEffects": ["*.scss", "*.css"],
+  "main": "src/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -128,13 +129,14 @@ import "bootstrap";
 document.body.style.color = "blue";
 ```
 
-В Webpack 5 выходной путь и очистка задаются в `output`:
+В Webpack 5 выходной путь и очистка задаются в `output`. В production при использовании `splitChunks` и `runtimeChunk` итоговые файлы будут иметь имена `js/[name].js` (например, `main.js`, `vendors.js`, `runtime.js`); в development — один `js/bundle.js`:
 
 ```javascript
 output: {
   path: path.resolve(__dirname, "dist"),
-  filename: "js/bundle.js",
+  filename: "js/bundle.js",  // в production переопределяется на "js/[name].js"
   clean: true,
+  assetModuleFilename: "assets/[name][ext]",
 }
 ```
 
@@ -173,13 +175,17 @@ $font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica 
 $logo-width: 10rem;
 $container-img-width: 20rem;
 
-@import "bootstrap/scss/bootstrap";
+@use "bootstrap/scss/bootstrap" as *;
 
 @font-face {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   src: url(../fonts/Roboto-Regular.ttf);
+}
+
+main {
+  flex: 1;
 }
 
 body {
@@ -198,7 +204,7 @@ body {
 }
 ```
 
-Bootstrap подключается через его SCSS (`@import "bootstrap/scss/bootstrap"`), чтобы при необходимости переопределять переменные и миксины.
+Bootstrap подключается через его SCSS (`@use "bootstrap/scss/bootstrap" as *`), чтобы при необходимости переопределять переменные и миксины.
 
 В `webpack.config.js` добавляем правило для SCSS и плагин:
 
@@ -218,13 +224,15 @@ entry: ["./src/js/index.js", "./src/scss/style.scss"],
       loader: "css-loader",
       options: { sourceMap: true, url: false },
     },
-    {
-      loader: "sass-loader",
-      options: {
-        implementation: require("sass"),
-        sourceMap: true,
-      },
+{
+  loader: "sass-loader",
+  options: {
+    sourceMap: true,
+    sassOptions: {
+      quietDeps: true,
     },
+  },
+},
   ],
 },
 
@@ -234,13 +242,48 @@ new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
 
 Параметр `url: false` у `css-loader` отключает обработку `url()` в CSS (шрифты, картинки). Пути к таким файлам не меняются, копированием занимается отдельно CopyPlugin (см. ниже). Так проще избежать путаницы с путями из `node_modules` и своих папок.
 
-Для минификации CSS в production используется `css-minimizer-webpack-plugin`:
+Для минификации CSS в production используется `css-minimizer-webpack-plugin`, для JS — `terser-webpack-plugin`:
 
 ```shell
 npm install css-minimizer-webpack-plugin terser-webpack-plugin --save-dev
 ```
 
-В конфиге они подключаются в `optimization.minimizer` (см. итоговый пример ниже).
+В конфиге их подключают в `optimization.minimizer`. Для разделения кода библиотек и кэширования добавляют `splitChunks` (отдельный чанк `vendors` из `node_modules`) и `runtimeChunk: "single"`:
+
+```javascript
+optimization: {
+  minimize: true,
+  minimizer: [
+    new CssMinimizerPlugin({
+      minimizerOptions: {
+        preset: [
+          "default",
+          { discardComments: { removeAll: true } },
+        ],
+      },
+    }),
+    new TerserPlugin({
+      extractComments: true,
+      terserOptions: {
+        compress: { drop_console: true },
+      },
+    }),
+  ],
+  splitChunks: {
+    chunks: "all",
+    cacheGroups: {
+      vendor: {
+        test: /[\\/]node_modules[\\/]/,
+        name: "vendors",
+        chunks: "all",
+      },
+    },
+  },
+  runtimeChunk: "single",
+},
+```
+
+В режиме development минификацию и разбиение чанков отключают для ускорения сборки.
 
 ## Сборка HTML-страниц
 
@@ -290,14 +333,31 @@ npm install html-webpack-plugin --save-dev
     <main>
 ```
 
-Файлы из `includes` должны загружаться как исходный текст. В Webpack 5 для этого используют встроенный тип `asset/source` (вместо отдельного `raw-loader`):
+Файлы из `includes` должны загружаться как исходный текст. В Webpack 5 для этого используют встроенный тип `asset/source` (вместо отдельного `raw-loader`). Для изображений, шрифтов и прочих ресурсов, подключаемых из JS или CSS, можно использовать встроенные asset modules; статические каталоги по-прежнему копируются CopyPlugin (см. ниже):
 
 ```javascript
 {
   test: /\.html$/,
   include: path.resolve(__dirname, "src/html/includes"),
   type: "asset/source",
-}
+},
+// Опционально: изображения и шрифты, импортируемые в коде
+{
+  test: /\.(png|jpe?g|gif|svg|webp|avif)$/i,
+  type: "asset",
+  parser: { dataUrlCondition: { maxSize: 8 * 1024 } },
+  generator: { filename: "img/[name][ext]" },
+},
+{
+  test: /\.(woff|woff2|eot|ttf|otf)$/i,
+  type: "asset/resource",
+  generator: { filename: "fonts/[name][ext]" },
+},
+{
+  test: /\.(ico|pdf)$/i,
+  type: "asset/resource",
+  generator: { filename: "[name][ext]" },
+},
 ```
 
 Чтобы не создавать вручную экземпляр плагина для каждой страницы, список HTML-файлов собирают из папки `src/html/views`:
@@ -361,10 +421,10 @@ plugins: [
 
 ## Режим разработки и production
 
-В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` можно менять настройки в зависимости от `argv.mode`:
+В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` настройки меняют в зависимости от `argv.mode`:
 
-- в development отключают минификацию и code splitting для быстрой сборки;
-- в production включают `CssMinimizerPlugin`, `TerserPlugin`, при необходимости `splitChunks` и `runtimeChunk`.
+- в development отключают минификацию, `splitChunks` и `runtimeChunk`, используют один выходной файл `js/bundle.js` и `eval-source-map`;
+- в production включают `CssMinimizerPlugin`, `TerserPlugin`, `splitChunks`, `runtimeChunk`, задают `output.filename: "js/[name].js"`, а для стабильных имён чанков — `optimization.moduleIds: "named"` и `optimization.chunkIds: "named"`.
 
 Для ускорения повторных сборок используется кэш на диске:
 
@@ -372,6 +432,11 @@ plugins: [
 cache: {
   type: "filesystem",
   buildDependencies: { config: [__filename] },
+},
+devtool: "source-map",  // в development переопределяется на "eval-source-map"
+performance: {
+  maxEntrypointSize: 512000,
+  maxAssetSize: 512000,
 },
 ```
 
