@@ -3,8 +3,8 @@ $font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica 
 $logo-width: 10rem;
 $container-img-width: 20rem;
 
-// Bootstrap import
-@import "bootstrap/scss/bootstrap";
+// Bootstrap
+@use "bootstrap/scss/bootstrap" as *;
 
 // Font definitions
 @font-face {
