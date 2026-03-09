@@ -73,17 +73,6 @@ const config = {
         },
       }),
     ],
-    splitChunks: {
-      chunks: "all",
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all",
-        },
-      },
-    },
-    runtimeChunk: "single",
   },
   module: {
     rules: [
@@ -197,10 +186,11 @@ module.exports = (env, argv) => {
     config.optimization.minimize = false;
     config.output.filename = "js/bundle.js";
     config.output.assetModuleFilename = "assets/[name][ext]";
-    // Disable code splitting in development for simplicity
-    config.optimization.splitChunks = false;
-    config.optimization.runtimeChunk = false;
   }
+
+  // Single bundle in both dev and prod (no splitChunks, no runtimeChunk)
+  config.optimization.splitChunks = false;
+  config.optimization.runtimeChunk = false;
 
   return config;
 };
