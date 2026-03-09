@@ -2,6 +2,9 @@
   "name": "static-site-webpack-habr",
   "version": "2.0.0",
   "description": "HTML template",
+  "engines": {
+    "node": ">=18"
+  },
   "sideEffects": ["*.scss", "*.css"],
   "main": "src/js/index.js",
   "scripts": {
