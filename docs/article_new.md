@@ -9,7 +9,7 @@
 Сайт представляет собой простой набор HTML-страниц со своими CSS-стилями и файлом JavaScript. Нужно собрать сайт из исходников:
 
 - из SASS (точнее [SCSS](https://sass-lang.com/documentation/syntax)) формируется один CSS-файл;
-- из библиотек и пользовательского кода формируется один (или несколько) JavaScript-файл;
+- из библиотек и пользовательского кода формируется один JavaScript-файл;
 - HTML-страницы собираются по шаблонам, где шапка и футер вынесены в отдельные файлы.
 
 <details>
@@ -104,7 +104,7 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "webpack": "^5.105.3",
+    "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.3"
   }
@@ -129,12 +129,12 @@ import "bootstrap";
 document.body.style.color = "blue";
 ```
 
-В Webpack 5 выходной путь и очистка задаются в `output`. В production при использовании `splitChunks` и `runtimeChunk` итоговые файлы будут иметь имена `js/[name].js` (например, `main.js`, `vendors.js`, `runtime.js`); в development — один `js/bundle.js`:
+В Webpack 5 выходной путь и очистка задаются в `output`. В production итоговый файл — `js/main.js`, в development — один `js/bundle.js` (разбиение на чанки и отдельный runtime не используются):
 
 ```javascript
 output: {
   path: path.resolve(__dirname, "dist"),
-  filename: "js/bundle.js",  // в production переопределяется на "js/[name].js"
+  filename: "js/bundle.js",  // в production переопределяется на "js/[name].js" → main.js
   clean: true,
   assetModuleFilename: "assets/[name][ext]",
 }
@@ -219,20 +219,18 @@ entry: ["./src/js/index.js", "./src/scss/style.scss"],
   test: /\.(sass|scss)$/,
   include: path.resolve(__dirname, "src/scss"),
   use: [
-    { loader: MiniCssExtractPlugin.loader },
+    { loader: MiniCssExtractPlugin.loader, options: {} },
     {
       loader: "css-loader",
       options: { sourceMap: true, url: false },
     },
-{
-  loader: "sass-loader",
-  options: {
-    sourceMap: true,
-    sassOptions: {
-      quietDeps: true,
+    {
+      loader: "sass-loader",
+      options: {
+        sourceMap: true,
+        sassOptions: { quietDeps: true },
+      },
     },
-  },
-},
   ],
 },
 
@@ -248,7 +246,7 @@ new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
 npm install css-minimizer-webpack-plugin terser-webpack-plugin --save-dev
 ```
 
-В конфиге их подключают в `optimization.minimizer`. Для разделения кода библиотек и кэширования добавляют `splitChunks` (отдельный чанк `vendors` из `node_modules`) и `runtimeChunk: "single"`:
+В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл (в production — `main.js`, в development — `bundle.js`), что упрощает подключение скриптов и подходит для небольшого статического сайта:
 
 ```javascript
 optimization: {
@@ -269,21 +267,10 @@ optimization: {
       },
     }),
   ],
-  splitChunks: {
-    chunks: "all",
-    cacheGroups: {
-      vendor: {
-        test: /[\\/]node_modules[\\/]/,
-        name: "vendors",
-        chunks: "all",
-      },
-    },
-  },
-  runtimeChunk: "single",
 },
 ```
 
-В режиме development минификацию и разбиение чанков отключают для ускорения сборки.
+В режиме development минификацию отключают для ускорения сборки.
 
 ## Сборка HTML-страниц
 
@@ -423,8 +410,8 @@ plugins: [
 
 В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` настройки меняют в зависимости от `argv.mode`:
 
-- в development отключают минификацию, `splitChunks` и `runtimeChunk`, используют один выходной файл `js/bundle.js` и `eval-source-map`;
-- в production включают `CssMinimizerPlugin`, `TerserPlugin`, `splitChunks`, `runtimeChunk`, задают `output.filename: "js/[name].js"`, а для стабильных имён чанков — `optimization.moduleIds: "named"` и `optimization.chunkIds: "named"`.
+- в development отключают минификацию, используют один выходной файл `js/bundle.js` и `eval-source-map`;
+- в production включают `CssMinimizerPlugin` и `TerserPlugin`, задают `output.filename: "js/[name].js"` (итоговый файл — `main.js`), для стабильных имён — `optimization.moduleIds: "named"` и `optimization.chunkIds: "named"`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
 
 Для ускорения повторных сборок используется кэш на диске:
 
