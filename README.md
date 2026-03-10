@@ -50,12 +50,12 @@ npm run build
 
 ### Other scripts
 
-| Command | Description |
-| --- | --- |
-| `npm start` | Dev server |
-| `npm run dev` | One-off development build |
+| Command         | Description                          |
+| --------------- | ------------------------------------ |
+| `npm start`     | Dev server                           |
+| `npm run dev`   | One-off development build            |
 | `npm run watch` | Development build with file watching |
-| `npm run build` | Production build |
+| `npm run build` | Production build                     |
 
 ## License
 
