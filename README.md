@@ -6,7 +6,7 @@ Demonstration of building HTML pages (or static site) using `Webpack`.
 
 Article (contains outdated [version](https://github.com/Harrix/static-site-webpack-habr/releases/tag/v1.0)) [https://habr.com/ru/articles/350886/](https://habr.com/ru/articles/350886/).
 
-New article: [article_new.md](https://github.com/Harrix/static-site-webpack-habr/blob/main/docs/article_new.md) (in the process of long writing).
+New article: [article_new.md](https://github.com/Harrix/static-site-webpack-habr/blob/main/docs/article_new.md).
 
 License: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/main/LICENSE.md).
 
