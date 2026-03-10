@@ -21,4 +21,4 @@ License: [MIT](https://github.com/Harrix/static-site-webpack-habr/blob/main/LICE
 
 ## Author
 
-Author: Sergienko Anton Borisovich.
+Author: Anton Sergienko.
