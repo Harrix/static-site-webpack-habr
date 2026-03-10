@@ -8,19 +8,19 @@ Article (contains outdated version `v1.0`): <https://habr.com/ru/articles/350886
 
 New article draft: [`docs/article_new.md`](docs/article_new.md).
 
-## Getting started
+## 🚀 Getting started
 
-### Prerequisites
+### ✅ Prerequisites
 
 - [Node.js](https://nodejs.org/) (npm comes with Node.js)
 
-### Installation
+### 📦 Installation
 
 ```bash
 npm install
 ```
 
-### Development
+### 🧑‍💻 Development
 
 Start the dev server:
 
@@ -40,7 +40,7 @@ Watch mode:
 npm run watch
 ```
 
-### Build
+### 🏗️ Build
 
 Create a production build:
 
@@ -48,7 +48,7 @@ Create a production build:
 npm run build
 ```
 
-### Other scripts
+### 🧰 Other scripts
 
 | Command         | Description                          |
 | --------------- | ------------------------------------ |
@@ -57,10 +57,10 @@ npm run build
 | `npm run watch` | Development build with file watching |
 | `npm run build` | Production build                     |
 
-## License
+## 📄 License
 
 [MIT](LICENSE.md)
 
-## Author
+## 👤 Author
 
 Anton Sergienko.
