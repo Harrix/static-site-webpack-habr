@@ -59,8 +59,8 @@ npm run build
 
 ## 📄 License
 
-[MIT](LICENSE.md)
+This project is licensed under the [MIT License](https://github.com/Harrix/harrix-swiss-knife/blob/main/LICENSE.md).
 
 ## 👤 Author
 
-Anton Sergienko.
+Author: [Anton Sergienko](https://github.com/Harrix).
