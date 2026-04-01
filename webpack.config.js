@@ -193,11 +193,11 @@ module.exports = (env, argv) => {
   const miniCssPlugin = config.plugins.find((p) => p instanceof MiniCssExtractPlugin);
 
   if (argv.mode === "production") {
-    config.output.filename = "js/[name].[contenthash:8].js";
-    config.output.assetModuleFilename = "assets/[name].[contenthash:8][ext]";
+    config.output.filename = "js/bundle.js";
+    config.output.assetModuleFilename = "assets/[name][ext]";
     config.devtool = "hidden-source-map";
     if (miniCssPlugin) {
-      miniCssPlugin.options.filename = "css/[name].[contenthash:8].css";
+      miniCssPlugin.options.filename = "css/style.bundle.css";
     }
   } else {
     config.devtool = "eval-source-map";

@@ -133,14 +133,14 @@ import "bootstrap";
 document.body.style.color = "blue";
 ```
 
-В Webpack 5 выходной путь и очистка задаются в `output`. В development — один файл `js/bundle.js`. В production имя JS-файла получает [content hash](https://webpack.js.org/configuration/output/#outputfilename) для кэширования в браузере, например `js/main.abc12def.js` (шаблон `js/[name].[contenthash:8].js`). Разбиение на чанки и отдельный runtime не используются.
+В Webpack 5 выходной путь и очистка задаются в `output`. И в development, и в production выходной JS — один файл `js/bundle.js` (без [content hash](https://webpack.js.org/configuration/output/#outputfilename) в имени: так проще предсказуемые пути на хостинге; при необходимости кэш можно сбрасывать иначе или вернуть шаблон вида `js/[name].[contenthash:8].js`). Разбиение на чанки и отдельный runtime не используются.
 
 ```javascript
 output: {
   path: path.resolve(__dirname, "dist"),
-  filename: "js/bundle.js",  // в production: "js/[name].[contenthash:8].js"
+  filename: "js/bundle.js",
   clean: true,
-  assetModuleFilename: "assets/[name][ext]",  // в production: "assets/[name].[contenthash:8][ext]"
+  assetModuleFilename: "assets/[name][ext]",
 }
 ```
 
@@ -243,9 +243,8 @@ entry: ["./src/js/index.js", "./src/scss/style.scss"],
   ],
 },
 
-// В plugins (в development):
+// В plugins:
 new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
-// В production имя CSS переопределяется на "css/[name].[contenthash:8].css"
 ```
 
 Параметр `url: false` у `css-loader` отключает обработку `url()` в CSS (шрифты, картинки). Пути к таким файлам не меняются, копированием занимается отдельно CopyPlugin (см. ниже). Так проще избежать путаницы с путями из `node_modules` и своих папок.
@@ -256,7 +255,7 @@ new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
 npm install css-minimizer-webpack-plugin terser-webpack-plugin --save-dev
 ```
 
-В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл (в development — `js/bundle.js`, в production — один файл вида `js/main.[hash].js`), что упрощает подключение скриптов и подходит для небольшого статического сайта:
+В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл `js/bundle.js`, что упрощает подключение скриптов и подходит для небольшого статического сайта:
 
 ```javascript
 optimization: {
@@ -447,8 +446,8 @@ plugins: [
 
 В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` настройки меняют в зависимости от `argv.mode`:
 
-- в development отключают минификацию, используют один выходной файл `js/bundle.js`, CSS — `css/style.bundle.css`, `devtool: "eval-source-map"`;
-- в production включают `CssMinimizerPlugin` и `TerserPlugin`, задают `output.filename: "js/[name].[contenthash:8].js"` и хешированные имена для CSS (`css/[name].[contenthash:8].css`) и для файлов из asset modules, `devtool: "hidden-source-map"` (отдельные `.map` генерируются, но в бандл ссылка на них не вставляется). Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
+- в development отключают минификацию, используют один выходной файл `js/bundle.js`, CSS — `css/style.bundle.css`, ресурсы из asset modules — `assets/[name][ext]`, `devtool: "eval-source-map"`;
+- в production включают `CssMinimizerPlugin` и `TerserPlugin`, оставляют те же стабильные имена файлов (`js/bundle.js`, `css/style.bundle.css`, `assets/[name][ext]` без content hash), `devtool: "hidden-source-map"` (отдельные `.map` генерируются, но в бандл ссылка на них не вставляется). Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
 
 Для ускорения повторных сборок используется кэш на диске:
 
@@ -476,4 +475,4 @@ devServer: {
 },
 ```
 
-Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML; результат лежит в папке `dist`. Имена сжатых JS и CSS в production содержат короткий content hash; `HtmlWebpackPlugin` подставляет в страницы актуальные пути к ним.
+Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML; результат лежит в папке `dist`. Имена JS, CSS и файлов в `assets/` без content hash; `HtmlWebpackPlugin` подставляет в страницы ссылки на собранные бандлы.
