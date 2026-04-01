@@ -1,10 +1,10 @@
-<% var data = {
+﻿<% var data = {
   title: "Второй заголовок | Проект",
   description: "Вторая страница проекта",
   author: "Harrix"
 }; %>
-<%= _.template(require('./../includes/header.html'))(data) %>
+<%= include("header.html", data) %>
 
 <div class="container">Вторая страница.</div>
 
-<%= _.template(require('./../includes/footer.html'))(data) %>
+<%= include("footer.html", data) %>
