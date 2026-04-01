@@ -231,7 +231,7 @@ entry: ["./src/js/index.js", "./src/scss/style.scss"],
     { loader: MiniCssExtractPlugin.loader, options: {} },
     {
       loader: "css-loader",
-      options: { sourceMap: true, url: false },
+      options: { sourceMap: true, url: true },
     },
     {
       loader: "sass-loader",
@@ -247,7 +247,7 @@ entry: ["./src/js/index.js", "./src/scss/style.scss"],
 new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
 ```
 
-Параметр `url: false` у `css-loader` отключает обработку `url()` в CSS (шрифты, картинки). Пути к таким файлам не меняются, копированием занимается отдельно CopyPlugin (см. ниже). Так проще избежать путаницы с путями из `node_modules` и своих папок.
+Параметр `url: true` (значение по умолчанию у `css-loader`, в репозитории задан явно) включает разбор `url(...)` в скомпилированном CSS: относительные пути к файлам (например, шрифт в `@font-face` из `../fonts/…` рядом с SCSS) превращаются в модули Webpack и попадают в выходную структуру согласно правилам `asset` / `asset/resource` (у нас шрифты — в `fonts/[name][ext]`). Итоговый CSS в `dist` получает корректные URL относительно выложенного сайта, в том числе при смене `publicPath` или раскладки `dist/`. Ссылки вида `data:…` (иконки форм и навигации в Bootstrap) обрабатываются как данные и не требуют файлов на диске. Файлы из `src/img`, `src/favicon`, `src/uploads` по-прежнему копирует CopyPlugin, если они не подключаются через `url()` в стилях; каталог `src/fonts` тоже копируется — так в сборку попадают шрифты, которые вы положили в папку, но ещё не сослались из SCSS.
 
 Для минификации CSS в production используется `css-minimizer-webpack-plugin`, для JS — `terser-webpack-plugin`:
 

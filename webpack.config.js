@@ -155,7 +155,8 @@ function createWebpackConfig(env, argv) {
               loader: "css-loader",
               options: {
                 sourceMap: true,
-                url: false,
+                // Resolve file url(...) in SCSS; Bootstrap uses data: URLs for icons (unchanged).
+                url: true,
               },
             },
             {
