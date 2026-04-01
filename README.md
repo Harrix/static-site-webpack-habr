@@ -59,7 +59,7 @@ npm run build
 
 ## 📄 License
 
-This project is licensed under the [MIT License](https://github.com/Harrix/harrix-swiss-knife/blob/main/LICENSE.md).
+This project is licensed under the [MIT License](https://github.com/Harrix/static-site-webpack-habr/blob/main/LICENSE.md).
 
 ## 👤 Author
 
