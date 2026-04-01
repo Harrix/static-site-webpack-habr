@@ -23,7 +23,7 @@
 
 Для примера сверстано несколько страниц на базе [Bootstrap 5](https://getbootstrap.com). Это только пример, можно использовать любой другой фреймворк или писать стили сами.
 
-Предполагается, что [Node.js](https://nodejs.org) установлен и вы умеете работать с командной строкой (в Windows — `cmd` или PowerShell).
+Предполагается, что [Node.js](https://nodejs.org) версии 20 или новее установлен (в `package.json` задано `engines.node: ">=20"`) и вы умеете работать с командной строкой (в Windows — `cmd` или PowerShell).
 
 В итоге нужен набор готовых HTML-страниц для заливки на хостинг (например, [GitHub Pages](https://pages.github.com/)) или для локального просмотра.
 
@@ -98,18 +98,22 @@ npm install webpack webpack-cli webpack-dev-server --save-dev
   "name": "static-site-webpack-habr",
   "version": "2.0.0",
   "description": "HTML template",
-  "sideEffects": ["*.scss", "*.css"],
+  "engines": {
+    "node": ">=20"
+  },
   "main": "src/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "webpack": "^5.105.4",
-    "webpack-cli": "^6.0.1",
+    "webpack-cli": "^7.0.2",
     "webpack-dev-server": "^5.2.3"
   }
 }
 ```
+
+Дальше по тексту добавляются Bootstrap, скрипты `dev` / `watch` / `start` / `build`, Prettier, лоадеры и плагины; итоговый `package.json` см. в репозитории.
 
 ## Сборка JavaScript
 
@@ -129,14 +133,14 @@ import "bootstrap";
 document.body.style.color = "blue";
 ```
 
-В Webpack 5 выходной путь и очистка задаются в `output`. В production итоговый файл — `js/main.js`, в development — один `js/bundle.js` (разбиение на чанки и отдельный runtime не используются):
+В Webpack 5 выходной путь и очистка задаются в `output`. В development — один файл `js/bundle.js`. В production имя JS-файла получает [content hash](https://webpack.js.org/configuration/output/#outputfilename) для кэширования в браузере, например `js/main.abc12def.js` (шаблон `js/[name].[contenthash:8].js`). Разбиение на чанки и отдельный runtime не используются.
 
 ```javascript
 output: {
   path: path.resolve(__dirname, "dist"),
-  filename: "js/bundle.js",  // в production переопределяется на "js/[name].js" → main.js
+  filename: "js/bundle.js",  // в production: "js/[name].[contenthash:8].js"
   clean: true,
-  assetModuleFilename: "assets/[name][ext]",
+  assetModuleFilename: "assets/[name][ext]",  // в production: "assets/[name].[contenthash:8][ext]"
 }
 ```
 
@@ -157,6 +161,8 @@ output: {
 - **npm run watch** — сборка при изменении файлов.
 - **npm run start** — запуск dev-сервера (по умолчанию порт 9000), с открытием браузера и hot reload.
 - **npm run build** — production-сборка и форматирование HTML в `dist` через Prettier.
+
+Для последней команды в `devDependencies` должен быть установлен [Prettier](https://prettier.io/): `npm install prettier --save-dev`.
 
 ## Сборка CSS
 
@@ -214,6 +220,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // В entry добавляем:
 entry: ["./src/js/index.js", "./src/scss/style.scss"],
 
+// В package.json (как в репозитории) для корректного tree-shaking при отдельной точке входа для стилей:
+// "sideEffects": ["*.scss", "*.css"]
+
 // В module.rules:
 {
   test: /\.(sass|scss)$/,
@@ -234,8 +243,9 @@ entry: ["./src/js/index.js", "./src/scss/style.scss"],
   ],
 },
 
-// В plugins:
+// В plugins (в development):
 new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
+// В production имя CSS переопределяется на "css/[name].[contenthash:8].css"
 ```
 
 Параметр `url: false` у `css-loader` отключает обработку `url()` в CSS (шрифты, картинки). Пути к таким файлам не меняются, копированием занимается отдельно CopyPlugin (см. ниже). Так проще избежать путаницы с путями из `node_modules` и своих папок.
@@ -246,7 +256,7 @@ new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
 npm install css-minimizer-webpack-plugin terser-webpack-plugin --save-dev
 ```
 
-В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл (в production — `main.js`, в development — `bundle.js`), что упрощает подключение скриптов и подходит для небольшого статического сайта:
+В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл (в development — `js/bundle.js`, в production — один файл вида `js/main.[hash].js`), что упрощает подключение скриптов и подходит для небольшого статического сайта:
 
 ```javascript
 optimization: {
@@ -274,12 +284,12 @@ optimization: {
 
 ## Сборка HTML-страниц
 
-Для HTML используется [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) с шаблонизатором lodash (идущим в комплекте с плагином).
+Для HTML используется [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) с шаблонизатором в стиле [lodash.template](https://lodash.com/docs/#template). Для подключения общих фрагментов из `src/html/includes` в конфиге Webpack задаётся функция `include`, которая читает файл по имени и рендерит его через `lodash` с переданными данными.
 
-Устанавливаем плагин:
+Устанавливаем плагин и `lodash` (он нужен в `webpack.config.js` для рендера includes):
 
 ```shell
-npm install html-webpack-plugin --save-dev
+npm install html-webpack-plugin lodash --save-dev
 ```
 
 Страницы лежат в `src/html/views`. Каждая страница задаёт переменные и подключает общие шапку и футер. Пример `src/html/views/index.html`:
@@ -290,16 +300,41 @@ npm install html-webpack-plugin --save-dev
   description: "Первая страница проекта — сборка статического сайта на Webpack",
   author: "Harrix"
 }; %>
-<%= _.template(require('./../includes/header.html'))(data) %>
+<%= include("header.html", data) %>
 
 <div class="container">Первая страница.</div>
 
-<%= _.template(require('./../includes/footer.html'))(data) %>
+<%= include("footer.html", data) %>
 ```
 
-В `data` передаются переменные страницы (title, description, author и т.д.). Шаблоны из `includes` подключаются через `_.template(require(...))(data)`.
+В `data` передаются переменные страницы (title, description, author и т.д.). Вызов `include("имя.html", data)` подставляет файл из `src/html/includes`; в путь передаётся только basename (без `..` и без подкаталогов), чтобы исключить обход каталога.
 
-Важно: подключать нужно именно так (шаблон через `require` и lodash), а не через `html-loader`, иначе в подключаемых файлах не будет работать синтаксис lodash и переменные из `data`.
+В `webpack.config.js` это выглядит так:
+
+```javascript
+const fs = require("fs");
+const _ = require("lodash");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const INCLUDES_DIR = path.resolve(__dirname, "src/html/includes");
+
+function includeHtml(filename, data) {
+  const safeName = path.basename(filename);
+  const fullPath = path.resolve(INCLUDES_DIR, safeName);
+  const rel = path.relative(INCLUDES_DIR, fullPath);
+  if (rel.startsWith("..") || path.isAbsolute(rel)) {
+    throw new Error(`Invalid include: ${filename}`);
+  }
+  const source = fs.readFileSync(fullPath, "utf8");
+  return _.template(source)(data);
+}
+```
+
+Для каждого экземпляра `HtmlWebpackPlugin` передаётся `templateParameters: { include: includeHtml }`, чтобы в шаблонах страниц была доступна функция `include`.
+
+Альтернатива — вручную писать `_.template(require('./../includes/header.html'))(data)` при правиле `asset/source` для `includes`; текущий проект использует `include(...)` для более короткой разметки и единообразной проверки путей.
+
+Важно: фрагменты из `includes` не подключают через `html-loader` как обычные шаблоны страниц, иначе в них не будут доступны те же переменные и синтаксис, что в `views`.
 
 Пример `src/html/includes/header.html`:
 
@@ -347,14 +382,13 @@ npm install html-webpack-plugin --save-dev
 },
 ```
 
-Чтобы не создавать вручную экземпляр плагина для каждой страницы, список HTML-файлов собирают из папки `src/html/views`:
+Чтобы не создавать вручную экземпляр плагина для каждой страницы, список HTML-файлов собирают из папки `src/html/views` (берутся только файлы с расширением `.html`):
 
 ```javascript
-const fs = require("fs");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-
 function generateHtmlPlugins(templateDir) {
-  const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
+  const templateFiles = fs
+    .readdirSync(path.resolve(__dirname, templateDir))
+    .filter((item) => path.parse(item).ext.toLowerCase() === ".html");
   return templateFiles.map((item) => {
     const parsedPath = path.parse(item);
     const name = parsedPath.name;
@@ -364,6 +398,9 @@ function generateHtmlPlugins(templateDir) {
       template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
       inject: "body",
       scriptLoading: "defer",
+      templateParameters: {
+        include: includeHtml,
+      },
     });
   });
 }
@@ -410,8 +447,8 @@ plugins: [
 
 В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` настройки меняют в зависимости от `argv.mode`:
 
-- в development отключают минификацию, используют один выходной файл `js/bundle.js` и `eval-source-map`;
-- в production включают `CssMinimizerPlugin` и `TerserPlugin`, задают `output.filename: "js/[name].js"` (итоговый файл — `main.js`), для стабильных имён — `optimization.moduleIds: "named"` и `optimization.chunkIds: "named"`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
+- в development отключают минификацию, используют один выходной файл `js/bundle.js`, CSS — `css/style.bundle.css`, `devtool: "eval-source-map"`;
+- в production включают `CssMinimizerPlugin` и `TerserPlugin`, задают `output.filename: "js/[name].[contenthash:8].js"` и хешированные имена для CSS (`css/[name].[contenthash:8].css`) и для файлов из asset modules, `devtool: "hidden-source-map"` (отдельные `.map` генерируются, но в бандл ссылка на них не вставляется). Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
 
 Для ускорения повторных сборок используется кэш на диске:
 
@@ -420,7 +457,7 @@ cache: {
   type: "filesystem",
   buildDependencies: { config: [__filename] },
 },
-devtool: "source-map",  // в development переопределяется на "eval-source-map"
+devtool: "source-map",  // в development: "eval-source-map", в production: "hidden-source-map"
 performance: {
   maxEntrypointSize: 512000,
   maxAssetSize: 512000,
@@ -439,4 +476,4 @@ devServer: {
 },
 ```
 
-Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML; результат лежит в папке `dist`.
+Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML; результат лежит в папке `dist`. Имена сжатых JS и CSS в production содержат короткий content hash; `HtmlWebpackPlugin` подставляет в страницы актуальные пути к ним.
