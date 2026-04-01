@@ -255,12 +255,11 @@ new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
 npm install css-minimizer-webpack-plugin terser-webpack-plugin --save-dev
 ```
 
-В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл `js/bundle.js`, что упрощает подключение скриптов и подходит для небольшого статического сайта:
+В конфиге их подключают в `optimization.minimizer`. Разбиение на чанки (`splitChunks`, `runtimeChunk`) в проекте отключено: в обоих режимах собирается один JS-файл `js/bundle.js`, что упрощает подключение скриптов и подходит для небольшого статического сайта. В репозитории экземпляры минификаторов создаёт отдельная функция `createMinimizers()`, а флаг `optimization.minimize` выставляется в `true` только для production (в development — `false`, для ускорения сборки):
 
 ```javascript
-optimization: {
-  minimize: true,
-  minimizer: [
+function createMinimizers() {
+  return [
     new CssMinimizerPlugin({
       minimizerOptions: {
         preset: [
@@ -275,11 +274,17 @@ optimization: {
         compress: { drop_console: true },
       },
     }),
-  ],
+  ];
+}
+
+// внутри createWebpackConfig(env, argv):
+optimization: {
+  minimize: argv.mode === "production",
+  minimizer: createMinimizers(),
+  splitChunks: false,
+  runtimeChunk: false,
 },
 ```
-
-В режиме development минификацию отключают для ускорения сборки.
 
 ## Сборка HTML-страниц
 
@@ -404,11 +409,19 @@ function generateHtmlPlugins(templateDir) {
   });
 }
 
-const htmlPlugins = generateHtmlPlugins("src/html/views");
+function createPlugins() {
+  return [
+    new MiniCssExtractPlugin({ filename: "css/style.bundle.css" }),
+    new CopyPlugin({ patterns: createCopyPatterns() }), // createCopyPatterns — в разделе «Копирование статических файлов»
+    ...generateHtmlPlugins("src/html/views"),
+  ];
+}
 
-// В plugins:
-plugins: [/* ... */].concat(htmlPlugins),
+// внутри возвращаемого объекта конфигурации:
+plugins: createPlugins(),
 ```
+
+Так при каждом вызове фабрики конфигурации создаются новые экземпляры плагинов (в том числе для каждой страницы), а не переиспользуется один и тот же массив — это согласуется с подходом без мутации общего объекта `config` (см. раздел про режимы ниже).
 
 С опцией `inject: "body"` плагин сам добавит в конец `<body>` ссылки на собранные JS и CSS, поэтому в шаблонах их прописывать не нужно.
 
@@ -422,45 +435,53 @@ plugins: [/* ... */].concat(htmlPlugins),
 npm install copy-webpack-plugin --save-dev
 ```
 
-В Webpack 5 используется новый API с `patterns`:
+В Webpack 5 используется новый API с `patterns`. В репозитории массив шаблонов вынесен в функцию `createCopyPatterns()`, а сам `CopyPlugin` добавляется в общий список в `createPlugins()`:
 
 ```javascript
 const CopyPlugin = require("copy-webpack-plugin");
 
-plugins: [
-  // ...
-  new CopyPlugin({
-    patterns: [
-      { from: "src/fonts", to: "fonts", noErrorOnMissing: true },
-      { from: "src/favicon", to: "favicon", noErrorOnMissing: true },
-      { from: "src/img", to: "img", noErrorOnMissing: true },
-      { from: "src/uploads", to: "uploads", noErrorOnMissing: true },
-    ],
-  }),
-],
+function createCopyPatterns() {
+  return [
+    { from: "src/fonts", to: "fonts", noErrorOnMissing: true },
+    { from: "src/favicon", to: "favicon", noErrorOnMissing: true },
+    { from: "src/img", to: "img", noErrorOnMissing: true },
+    { from: "src/uploads", to: "uploads", noErrorOnMissing: true },
+  ];
+}
 ```
 
 `noErrorOnMissing: true` не даёт сборке падать, если какой-то из каталогов отсутствует.
 
 ## Режим разработки и production
 
-В текущем конфиге режим задаётся через `--mode development` или `--mode production`. В функции `module.exports = (env, argv) => { ... }` настройки меняют в зависимости от `argv.mode`:
+В текущем конфиге режим задаётся через `--mode development` или `--mode production`. Экспорт модуля — это функция `(env, argv) => createWebpackConfig(env, argv)`, которая **каждый раз возвращает новый объект** настроек. Общий объект конфигурации между вызовами **не изменяют**: так проще избежать накопления правок, если конфигурационную функцию вызовут повторно в том же процессе (например, в тестах или инструментах).
 
-- в development отключают минификацию, используют один выходной файл `js/bundle.js`, CSS — `css/style.bundle.css`, ресурсы из asset modules — `assets/[name][ext]`, `devtool: "eval-source-map"`;
-- в production включают `CssMinimizerPlugin` и `TerserPlugin`, оставляют те же стабильные имена файлов (`js/bundle.js`, `css/style.bundle.css`, `assets/[name][ext]` без content hash), `devtool: "hidden-source-map"` (отдельные `.map` генерируются, но в бандл ссылка на них не вставляется). Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
+Внутри `createWebpackConfig` в зависимости от `argv.mode` задаются:
 
-Для ускорения повторных сборок используется кэш на диске:
+- в development — `optimization.minimize: false`, один выходной файл `js/bundle.js`, CSS — `css/style.bundle.css`, ресурсы из asset modules — `assets/[name][ext]`, `devtool: "eval-source-map"`;
+- в production — `optimization.minimize: true` (работают `CssMinimizerPlugin` и `TerserPlugin` из `createMinimizers()`), те же стабильные имена файлов (`js/bundle.js`, `css/style.bundle.css`, `assets/[name][ext]` без content hash), `devtool: "hidden-source-map"` (отдельные `.map` генерируются, но в бандл ссылка на них не вставляется). Разбиение на чанки (`splitChunks`, `runtimeChunk`) отключено в обоих режимах: собирается один JS-бандл.
+
+Для ускорения повторных сборок используется кэш на диске; `devtool` задаётся условно, без одного «глобального» значения на весь файл:
 
 ```javascript
-cache: {
-  type: "filesystem",
-  buildDependencies: { config: [__filename] },
-},
-devtool: "source-map",  // в development: "eval-source-map", в production: "hidden-source-map"
-performance: {
-  maxEntrypointSize: 512000,
-  maxAssetSize: 512000,
-},
+function createWebpackConfig(env, argv) {
+  const isProduction = argv.mode === "production";
+  return {
+    // ...
+    devtool: isProduction ? "hidden-source-map" : "eval-source-map",
+    cache: {
+      type: "filesystem",
+      buildDependencies: { config: [__filename] },
+    },
+    performance: {
+      maxEntrypointSize: 512000,
+      maxAssetSize: 512000,
+    },
+    // optimization, module, plugins — см. репозиторий
+  };
+}
+
+module.exports = (env, argv) => createWebpackConfig(env, argv);
 ```
 
 Dev-сервер настроен так:
