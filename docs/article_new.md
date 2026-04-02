@@ -288,12 +288,12 @@ optimization: {
 
 ## Сборка HTML-страниц
 
-Для HTML используется [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) с шаблонизатором в стиле [lodash.template](https://lodash.com/docs/#template). Для подключения общих фрагментов из `src/html/includes` в конфиге Webpack задаётся функция `include`, которая читает файл по имени и рендерит его через `lodash` с переданными данными.
+Для HTML используется [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) с шаблонизатором в стиле [lodash.template](https://lodash.com/docs/#template). Для подключения общих фрагментов из `src/html/includes` в конфиге Webpack задаётся функция `include`, которая читает файл по имени и рендерит его через лёгкий шаблонизатор [Eta](https://www.npmjs.com/package/eta) с переданными данными.
 
-Устанавливаем плагин и `lodash` (он нужен в `webpack.config.js` для рендера includes):
+Устанавливаем плагин и `eta` (нужен в `webpack.config.js` для рендера includes):
 
 ```shell
-npm install html-webpack-plugin lodash --save-dev
+npm install html-webpack-plugin eta --save-dev
 ```
 
 Страницы лежат в `src/html/views`. Каждая страница задаёт переменные и подключает общие шапку и футер. Пример `src/html/views/index.html`:
@@ -317,10 +317,11 @@ npm install html-webpack-plugin lodash --save-dev
 
 ```javascript
 const fs = require("fs");
-const _ = require("lodash");
+const { Eta } = require("eta");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const INCLUDES_DIR = path.resolve(__dirname, "src/html/includes");
+const eta = new Eta({ useWith: true, autoEscape: false });
 
 function includeHtml(filename, data) {
   const safeName = path.basename(filename);
@@ -330,7 +331,7 @@ function includeHtml(filename, data) {
     throw new Error(`Invalid include: ${filename}`);
   }
   const source = fs.readFileSync(fullPath, "utf8");
-  return _.template(source)(data);
+  return eta.renderString(source, data);
 }
 ```
 

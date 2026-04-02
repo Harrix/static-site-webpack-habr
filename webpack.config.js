@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const _ = require("lodash");
+const { Eta } = require("eta");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -8,6 +8,12 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 const INCLUDES_DIR = path.resolve(__dirname, "src/html/includes");
+const eta = new Eta({
+  // Keep templates compatible with lodash.template-style usage:
+  // allow `<%= title %>` (without `it.`) and don't change escaping semantics.
+  useWith: true,
+  autoEscape: false,
+});
 
 /**
  * Renders a partial from src/html/includes (basename only; path traversal safe).
@@ -21,7 +27,7 @@ function includeHtml(filename, data) {
     throw new Error(`Invalid include: ${filename}`);
   }
   const source = fs.readFileSync(fullPath, "utf8");
-  return _.template(source)(data);
+  return eta.renderString(source, data);
 }
 
 function generateHtmlPlugins(templateDir) {
