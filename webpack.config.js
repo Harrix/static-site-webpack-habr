@@ -9,10 +9,11 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 const INCLUDES_DIR = path.resolve(__dirname, "src/html/includes");
 const eta = new Eta({
-  // Keep templates compatible with lodash.template-style usage:
-  // allow `<%= title %>` (without `it.`) and don't change escaping semantics.
+  // lodash-style scope: `<%= title %>` without `it.`
   useWith: true,
-  autoEscape: false,
+  // Escape interpolated values in includes (`<%= %>`) to avoid XSS if data ever comes from outside.
+  // Trusted HTML from another partial: use Eta raw tag `<%~ include("partial.html", data) %>`.
+  autoEscape: true,
 });
 
 /**

@@ -321,7 +321,7 @@ const { Eta } = require("eta");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const INCLUDES_DIR = path.resolve(__dirname, "src/html/includes");
-const eta = new Eta({ useWith: true, autoEscape: false });
+const eta = new Eta({ useWith: true, autoEscape: true });
 
 function includeHtml(filename, data) {
   const safeName = path.basename(filename);
@@ -334,6 +334,8 @@ function includeHtml(filename, data) {
   return eta.renderString(source, data);
 }
 ```
+
+У `Eta` включён `autoEscape: true`: значения в `<%= … %>` внутри `includes` экранируются. Если в include понадобится вставить уже готовый HTML из другого фрагмента (доверенный контент), в шаблоне include используйте сырой вывод Eta — `<%~ include("partial.html", data) %>`.
 
 Для каждого экземпляра `HtmlWebpackPlugin` передаётся `templateParameters: { include: includeHtml }`, чтобы в шаблонах страниц была доступна функция `include`.
 
