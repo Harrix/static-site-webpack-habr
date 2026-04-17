@@ -14,11 +14,11 @@
     "dev": "webpack --mode development",
     "watch": "webpack --mode development --watch",
     "start": "webpack serve --no-client-overlay-warnings",
-    "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html",
+    "build": "webpack --mode production && prettier --write \"dist/**/*.html\"",
     "lint": "eslint . --cache --cache-location node_modules/.cache/eslint",
     "lint:fix": "eslint . --fix --cache --cache-location node_modules/.cache/eslint",
-    "format": "prettier --write \"src/**/*.{js,scss,html}\" \"*.{js,mjs,json,md}\"",
-    "format:check": "prettier --check \"src/**/*.{js,scss,html}\" \"*.{js,mjs,json,md}\""
+    "format": "prettier --write \"src/**/*.{js,scss,html}\" \"*.{js,mjs,json,md}\" && prettier --write \"dist/**/*.html\"",
+    "format:check": "prettier --check \"src/**/*.{js,scss,html}\" \"*.{js,mjs,json,md}\" && prettier --check \"dist/**/*.html\""
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",

@@ -153,16 +153,21 @@ output: {
   "dev": "webpack --mode development",
   "watch": "webpack --mode development --watch",
   "start": "webpack serve --no-client-overlay-warnings",
-  "build": "webpack --mode production && prettier --print-width=120 --parser html --write dist/*.html"
+  "build": "webpack --mode production && prettier --write \"dist/**/*.html\""
 }
 ```
 
 - **npm run dev** — однократная сборка в режиме разработки.
 - **npm run watch** — сборка при изменении файлов.
 - **npm run start** — запуск dev-сервера (по умолчанию порт 9000), с открытием браузера и hot reload.
-- **npm run build** — production-сборка и форматирование HTML в `dist` через Prettier.
+- **npm run build** — production-сборка и форматирование сгенерированных HTML в `dist` через Prettier (`dist/**/*.html`, настройки ширины строки и прочее берутся из `.prettierrc`).
+- **npm run format** / **npm run format:check** — форматирование и проверка исходников в `src`, конфигов в корне и HTML в `dist` (второй шаг полезен после сборки, когда в `dist` уже есть страницы).
 
-Для последней команды в `devDependencies` должен быть установлен [Prettier](https://prettier.io/): `npm install prettier --save-dev`.
+Строка `dist` не входит в `.prettierignore`, иначе Prettier пропускал бы готовые HTML даже при явном указании пути в скрипте `build`.
+
+Каталоги `src/html/includes/` и `src/html/views/` наоборот указаны в `.prettierignore`: в них смешан синтаксис шаблонов (`<% … %>`, `<%= … %>`), а Prettier обрабатывает файлы как обычный HTML и может разорвать строки внутри кавычек или теги — после этого `html-webpack-plugin` (lodash.template) выдаёт ошибку вида `Invalid or unexpected token`.
+
+Для команд с Prettier в `devDependencies` должен быть установлен [Prettier](https://prettier.io/): `npm install prettier --save-dev`.
 
 ## Сборка CSS
 
@@ -428,7 +433,7 @@ plugins: createPlugins(),
 
 С опцией `inject: "body"` плагин сам добавит в конец `<body>` ссылки на собранные JS и CSS, поэтому в шаблонах их прописывать не нужно.
 
-Форматирование готовых HTML-файлов выполняется командой **npm run build** через Prettier (см. скрипт `build` в `package.json`). Отдельный пакет вроде `html-cli` не используется.
+Форматирование готовых HTML-файлов выполняется через Prettier после **npm run build** и при необходимости отдельно для уже собранного `dist` — **npm run format** (см. скрипты `build`, `format` и `format:check` в `package.json`). Отдельный пакет вроде `html-cli` не используется.
 
 ## Копирование статических файлов
 
@@ -499,4 +504,4 @@ devServer: {
 },
 ```
 
-Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML; результат лежит в папке `dist`. Имена JS, CSS и файлов в `assets/` без content hash; `HtmlWebpackPlugin` подставляет в страницы ссылки на собранные бандлы.
+Итоговые конфигурация и список зависимостей см. в репозитории [static-site-webpack-habr](https://github.com/Harrix/static-site-webpack-habr). Команда **npm run build** собирает проект и форматирует HTML в `dist`; **npm run format** дополнительно приводит к стилю Prettier исходники и при наличии — HTML в `dist`. Результат сборки лежит в папке `dist`. Имена JS, CSS и файлов в `assets/` без content hash; `HtmlWebpackPlugin` подставляет в страницы ссылки на собранные бандлы.

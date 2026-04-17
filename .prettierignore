@@ -1,6 +1,6 @@
 node_modules
-dist
 package-lock.json
 
-# Eta HTML fragments (not valid standalone HTML documents)
+# Eta / lodash template fragments (not valid standalone HTML; Prettier breaks <% %> tags)
 src/html/includes/
+src/html/views/
