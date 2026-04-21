@@ -15,8 +15,8 @@
     "watch": "webpack --mode development --watch",
     "start": "webpack serve --no-client-overlay-warnings",
     "build": "webpack --mode production && prettier --write \"dist/**/*.html\"",
-    "lint": "eslint . --cache --cache-location node_modules/.cache/eslint",
-    "lint:fix": "eslint . --fix --cache --cache-location node_modules/.cache/eslint",
+    "check": "eslint . --cache --cache-location node_modules/.cache/eslint",
+    "check:fix": "eslint . --fix --cache --cache-location node_modules/.cache/eslint",
     "format": "prettier --write \"src/**/*.{js,scss,html}\" \"*.{js,mjs,json,md}\" && prettier --write \"dist/**/*.html\"",
     "format:check": "prettier --check \"src/**/*.{js,scss,html}\" \"*.{js,mjs,json,md}\" && prettier --check \"dist/**/*.html\""
   },
